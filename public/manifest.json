@@ -1,6 +1,6 @@
 ﻿{
   "manifest_version": 3,
-  "name": "My Test Extension",
+  "name": "Chrome Extension Performance Test",
   "version": "1.0.0",
   "action": {
     "default_popup": "index.html#/popup"
