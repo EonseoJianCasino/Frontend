@@ -1,0 +1,9 @@
+﻿{
+  "manifest_version": 3,
+  "name": "My Test Extension",
+  "version": "1.0.0",
+  "action": {
+    "default_popup": "index.html#/popup"
+  },
+  "permissions": ["tabs"]
+}

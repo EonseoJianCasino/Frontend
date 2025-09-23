@@ -1,0 +1,23 @@
+@tailwind components;
+
+@layer components {
+  .layout {
+    @apply flex min-h-screen;
+  }
+
+  .layout__sidebar {
+    @apply w-[220px] border-r border-slate-200 p-4;
+  }
+
+  .layout__sidebar ul {
+    @apply mt-3 list-none p-0;
+  }
+
+  .layout__sidebar a {
+    @apply block py-1.5 text-sm text-slate-900 no-underline hover:text-slate-600;
+  }
+
+  .layout__content {
+    @apply flex-1 p-6;
+  }
+}
