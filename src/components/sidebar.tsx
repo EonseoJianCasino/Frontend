@@ -15,7 +15,7 @@ export default function Sidebar() {
               </NavLink>
             </li>
             <li>
-              <NavLink to="impr">Impr</NavLink>
+              <NavLink to="impr" end>Impr</NavLink>
             </li>
           </ul>
         </nav>
