@@ -5,19 +5,50 @@
     @apply flex min-h-screen;
   }
 
-  .layout__sidebar {
-    @apply w-[220px] border-r border-slate-200 p-4;
+  .layout_sidebar {
+    @apply w-[235px] border-r border-slate-200 p-4;
   }
 
-  .layout__sidebar ul {
+  .layout_sidebar ul {
     @apply mt-3 list-none p-0;
   }
 
-  .layout__sidebar a {
-    @apply block py-1.5 text-sm text-slate-900 no-underline hover:text-slate-600;
+  .layout_sidebar a {
+    @apply block py-1.5 no-underline hover:text-slate-600;
   }
 
-  .layout__content {
+  .layout_content {
     @apply flex-1 p-6;
   }
+
+  /* Brand */
+  .layout_brand {
+    @apply flex items-center gap-2 text-xl font-bold text-cyan-700;
+  }
+
+  .layout_brandIcon {
+    @apply w-6 h-6 object-contain shrink-0;
+  }
+
+  .layout_brandText {
+    @apply truncate;
+  }
+
+  /* End Brand */
+
+  /* 구분선 */
+  .layout_divider {
+    @apply mb-8 mt-4 h-[0.5px] w-[205px] bg-slate-200;
+  }
+
+  /* 링크 */
+  .layout_link {
+    @apply block ml-2 px-3 py-2.5 mt-2 text-gray-500 tracking-wider text-base font-bold rounded-md hover:bg-slate-50;
+  }
+
+  .layout_link.is-active {
+    @apply bg-slate-100 text-sky-700;
+  }
+
+  /* End 링크 */
 }
