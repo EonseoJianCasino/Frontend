@@ -38,7 +38,7 @@
 
   /* 구분선 */
   .layout_divider {
-    @apply mb-8 mt-4 h-[0.5px] w-[205px] bg-slate-200;
+    @apply mb-8 mt-4 h-[0.5px] w-[full] bg-slate-200;
   }
 
   /* 링크 */
