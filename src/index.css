@@ -17,10 +17,13 @@
   body {
     font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI",
       sans-serif;
-    @apply m-0 min-h-screen;
+    @apply m-0;
   }
 
-  #root {
-    @apply min-h-screen;
+  /* Popup route */
+  html.is-popup,
+  html.is-popup body,
+  html.is-popup #root {
+    background-color: #DEEBEF;
   }
 }
