@@ -19,7 +19,7 @@
   }
 
   .popup_cardSection {
-    @apply flex-1 px-6 pt-5 pb-6 box-border;
+    @apply flex-1 px-6 pt-5 pb-5 box-border;
   }
 
   .popup_card {
@@ -66,10 +66,49 @@
 
   /* btn */
   .popup_btn_submit {
-    @apply px-6 w-auto h-10 text-sm text-white font-semibold rounded-xl shadow-md transition-colors;
+    @apply px-4 w-auto h-10 text-sm text-white font-semibold rounded-xl shadow-md transition-colors;
   }
 
   .popup_btn_background {
     @apply bg-gradient-to-r from-[#0194C9] to-[#2E739E] hover:from-[#0288B3] hover:to-[#286A8E] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#2E739E] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+
+  .popup_btn_secondary {
+    @apply px-4 w-auto h-10 text-sm text-white font-semibold rounded-xl shadow-md bg-[#4B4B4B] hover:bg-[#3E3E3E] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4B4B4B];
+  }
+
+  /* Result Page */
+  .popup_metric_box {
+    @apply rounded-2xl px-4 py-2 shadow-sm border border-slate-100 bg-white w-[240px] mx-auto;
+  }
+
+  .popup_metric_grid {
+    @apply grid grid-cols-2;
+  }
+
+  .popup_metric_label {
+    @apply text-[10px] font-semibold text-slate-600;
+  }
+
+  .popup_metric_value {
+    @apply text-[11px] font-semibold text-[#3A7CA5];
+  }
+
+  .popup_status_bad {
+    @apply inline-flex items-center justify-center w-4 h-4 rounded-full text-white text-[10px] font-bold bg-[#FF5A5A];
+  }
+
+  .popup_status_good {
+    @apply inline-flex items-center justify-center w-4 h-4 rounded-full text-white text-[10px] font-bold bg-[#2E739E];
+  }
+
+  .popup_progress {
+    @apply relative w-full h-2 rounded-full overflow-hidden;
+    background-color: #E6E9EE;
+  }
+
+  .popup_progress_bar {
+    @apply absolute left-0 top-0 h-full rounded-full;
+    background-color: #2E739E;
   }
 }
