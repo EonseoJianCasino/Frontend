@@ -8,10 +8,14 @@ import ResultPage from "@/components/popup/steps/ResultPage";
 
 export default function Popup() {
   const [step, setStep] = useState(0);
+
+  const next = () => setStep((s) => Math.min(s + 1, 2));
+  const prev = () => setStep((s) => Math.max(s - 2, 0));
+
   const renderBody = () => {
-    if (step === 0) return <CurrentPage />;
+    if (step === 0) return <CurrentPage onNext={next} />;
     else if (step === 1) return <LoadingPage onDone={() => setStep(2)} />;
-    else return <ResultPage />;
+    else return <ResultPage onOpenDetail={openDetail} onPrev={prev} />;
   };
 
   useEffect(() => {
@@ -47,9 +51,7 @@ export default function Popup() {
     });
   };
 
-  const titles = ["현재 페이지", "로딩 페이지", "결과 페이지"] as const;
-  const next = () => setStep((s) => Math.min(s + 1, 2));
-  const prev = () => setStep((s) => Math.max(s - 2, 0));
+  const titles = ["현재 페이지", "분석 실행중", "성능 / 보안 분석결과"] as const;
 
   return (
     <main className="popup_container">
@@ -58,31 +60,7 @@ export default function Popup() {
         <div className="popup_title">Performance Test</div>
       </header>
       <Card title={titles[step]}>
-        <div className="p-4 space-y-4">
-          {renderBody()}
-
-          {step === 0 ? (
-            <button type="button" onClick={next} className="bg-slate-500">
-              {" "}
-              다음
-            </button>
-          ) : null}
-
-          {step === 2 ? (
-            <>
-              <button
-                type="button"
-                className="mt-2 px-3 py-2 rounded bg-emerald-500 text-white"
-                onClick={openDetail}
-              >
-                Go Detail
-              </button>
-              <button type="button" onClick={prev} className="bg-slate-500">
-                다시 시도하기
-              </button>
-            </>
-          ) : null}
-        </div>
+        <div className="p-4">{renderBody()}</div>
       </Card>
     </main>
   );

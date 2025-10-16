@@ -1,14 +1,14 @@
 import { useEffect } from "react";
 
 type LoadingPageProps = {
-  onDone?: () => void;
+  onDone: () => void;
 };
 
 export default function LoadingPage({ onDone }: LoadingPageProps) {
   useEffect(() => {
     const id = setTimeout(() => {
-      onDone?.();
-    }, 20000);
+      onDone();
+    }, 2000);
     return () => clearTimeout(id);
   }, [onDone]);
 

@@ -40,4 +40,36 @@
     @apply text-sm;
     color: #747474;
   }
+
+  /* Info Box */
+  .popup_infoBox {
+    @apply mt-6 flex items-center rounded-xl px-4 py-4 shadow-sm;
+    background-color: #F8F9FA;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .popup_infoText {
+    @apply min-w-0 flex-1 flex flex-col gap-2;
+  }
+
+  .popup_infoLabel {
+    @apply text-[10px] font-normal leading-none uppercase;
+    color: #888888;
+  }
+
+  .popup_infoValue {
+    @apply block text-[12px] font-semibold truncate pr-1;
+    color: #4B4B4B;
+  }
+
+  /* btn */
+  .popup_btn_submit {
+    @apply px-6 w-auto h-10 text-sm text-white font-semibold rounded-xl shadow-md transition-colors;
+  }
+
+  .popup_btn_background {
+    @apply bg-gradient-to-r from-[#0194C9] to-[#2E739E] hover:from-[#0288B3] hover:to-[#286A8E] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#2E739E] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
 }
