@@ -14,7 +14,7 @@ export default function ResultPage({ onOpenDetail, onPrev }: ResultPageProps) {
           <div className="popup_metric_label">성능</div>
           <div className="ml-auto flex items-center gap-2">
             <div className="popup_metric_value">{performance}</div>
-            <span className="popup_status_bad" aria-label="bad">!</span>
+            <span className="popup_status_bad">!</span>
           </div>
         </div>
         <div className="popup_progress mt-3">
