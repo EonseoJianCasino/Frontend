@@ -31,4 +31,13 @@
     background-color: #F8F9FA;
     color: #3A7CA5;
   }
+
+  .popup_loading_spinner {
+    @apply w-16 h-16 rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5] animate-spin;
+  }
+
+  .popup_loading_text {
+    @apply text-sm;
+    color: #747474;
+  }
 }
