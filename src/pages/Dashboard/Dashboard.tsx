@@ -14,6 +14,8 @@ export default function PerformanceDashboardMain() {
       {/* 상단 메인 카드 */}
       <article
         className="relative 
+          flex
+          flex-col
           box-border p-4
           w-full
           h-[394px]
@@ -60,16 +62,18 @@ export default function PerformanceDashboardMain() {
             https://www.youtube.com
           </a>
         </header>
+
+        {/* 차트 + 카드 */}
         <section
           className="w-full h-full flex flex-row  justify-start gap-x-4
         "
         >
+          {/* 차트 섹션 */}
           <section className="flex-1 max-w-[452px] max-h-[284px]">
-            {/* 차트 섹션 */}
             <SimpleBarChart />
           </section>
-          {/* 기타 아이템 섹션  */}
-          <section className="flex-1 ">
+          {/* 카드섹션  */}
+          <section className="flex-1 flex flex-col gap-y-4">
             <div>
               <div>원</div>
               <div>
@@ -88,27 +92,63 @@ export default function PerformanceDashboardMain() {
           w-full
           min-h-[372px]
           bg-[#FFFFFF] rounded-[15px] shadow-md 
-          border-[#DEEBEF] border-solid border-2"
+          border-[#DEEBEF] border-solid border-2
+          flex flex-col gap-y-5
+          "
       >
         <h2 className="text-[12px] text-[#4B4B4B] font-semibold text-[20px] ">
           🚨 우선 개선이 필요한 항목
         </h2>
         {/* 
-          // TODO : 상태에 따라 색상에 바뀌게 만들 것이다.
+          // TODO : 상태에 따라 색상에 바뀌게 만들 것이다. (soft하게 만들기)
         */}
-        <div>
-          <div>
+        <ul className="flex flex-col gap-y-4">
+          <li className="px-4 gap-x-4 w-full h-[58px] bg-[#F8F9FA] flex flex-row rounded-[10px]  justify-center items-center box-border
+          border-l-4 border-[#FF3C3C]
+          ">
             <img src={img_error} />
-          </div>
-          <div className="w-full h-[58px] bg-[#F8F9FA] flex flex-col rounded-[10px]">
-            <div className="text-[16px] text-[#4B4B4B] font-semibold ">
-              CSL 점수 개선이 필요
+            <div className="w-full h-full flex flex-col justify-center box-border">
+              <div className="text-[16px] text-[#4B4B4B] font-semibold ">
+                CSL 점수 개선이 필요
+              </div>
+              <div className="text-[12px] text-[#888888] font-semibold">
+                레이아웃 이동으로 인한 사용자 경험 저하
+              </div>
             </div>
-            <div className="text-[12px] text-[#888888] font-semibold">
-              레이아웃 이동으로 인한 사용자 경험 저하
+          </li>
+        </ul>
+
+        <ul className="flex flex-col gap-y-4">
+          <li className="px-4 gap-x-4 w-full h-[58px] bg-[#F8F9FA] flex flex-row rounded-[10px]  justify-center items-center box-border
+          border-l-4 border-[#FABF35]
+          ">
+            <img src={img_warning} />
+            <div className="w-full h-full flex flex-col justify-center box-border">
+              <div className="text-[16px] text-[#4B4B4B] font-semibold ">
+                보안 헤더 누락
+              </div>
+              <div className="text-[12px] text-[#888888] font-semibold">
+                CSP, HTTPS 헤더가 설정되지 않음
+              </div>
             </div>
-          </div>
-        </div>
+          </li>
+        </ul>
+
+        <ul className="flex flex-col gap-y-4">
+          <li className="px-4 gap-x-4 w-full h-[58px] bg-[#F8F9FA] flex flex-row rounded-[10px]  justify-center items-center box-border
+          border-l-4 border-[#357BFA]
+          ">
+            <img src={img_ok} />
+            <div className="w-full h-full flex flex-col justify-center box-border">
+              <div className="text-[16px] text-[#4B4B4B] font-semibold ">
+                SSL 인증서 만료 임박
+              </div>
+              <div className="text-[12px] text-[#888888] font-semibold">
+                29일 후 만료 예정 - 갱신 준비 필요
+              </div>
+            </div>
+          </li>
+        </ul>
       </article>
     </main>
   );
