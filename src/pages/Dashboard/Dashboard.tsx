@@ -4,6 +4,7 @@ import testData from "./testData";
 import img_error from "./imgs/error.svg";
 import img_ok from "./imgs/ok.svg";
 import img_warning from "./imgs/warning.svg";
+import CustomBarChart from "./CustomBarChart";
 
 export default function PerformanceDashboardMain() {
   return (
@@ -17,7 +18,7 @@ export default function PerformanceDashboardMain() {
           flex
           flex-col
           box-border p-4
-          w-full
+          w-full max-w-[953px] // TODO : max-w 추후 삭제 (비율 맞추기 )
           h-[394px]
           bg-[#FFFFFF] rounded-[15px] shadow-md 
           border-[#DEEBEF] border-solid border-2"
@@ -70,17 +71,37 @@ export default function PerformanceDashboardMain() {
         >
           {/* 차트 섹션 */}
           <section className="flex-1 max-w-[452px] max-h-[284px]">
-            <SimpleBarChart />
+            <CustomBarChart title="" yLabel="" />
           </section>
           {/* 카드섹션  */}
-          <section className="flex-1 flex flex-col gap-y-4">
-            <div>
-              <div>원</div>
-              <div>
-                <div>65점</div>
-                <div>Total Score</div>
+          <section className="flex-1 flex flex-col gap-y-2 items-center">
+            <section 
+              className="min-h-[92px] w-[261px] flex flex-row gap-x-4
+                        bg-[#FFFFFF] rounded-[15px] shadow-md box-border
+                        justify-around items-center">
+              <div className="w-16 h-16 rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5]"></div>
+              <div className="flex flex-col    justify-start gap-x-4">
+                <div className="text-[34px] text-[#3B3D53] font-semibold">65점</div>
+                <div className="text-[14px] text-[#4B4B4B]">Total Score</div>
               </div>
-            </div>
+            </section>
+            {/* 그리드 컴포넌트 2*3 */}
+            <section className="grid grid-cols-3 grid-rows-2 gap-4 h-full w-full gap-3 ">
+              {/* 카드 6개 */}
+              { [1,2,3,4,5,6].map(() => {
+                return(
+                  // TODO : 추후에 데이터 넣어서 변경 
+                  <div className="relative  justify-center  items-center h-full p-2 w-full flex flex-col border-box rounded-[15px] shadow-md ">
+                    <div className=" absolute top-2 px-2 items-center w-full flex flex-row border-box">
+                      <div className="w-full text-[#83869A] text-[16px]">LCP</div>
+                      <span className="inline-block rounded-full w-[10px] h-[10px] bg-[#ED9E9F] "></span>
+                    </div>
+                    <div className="font-semibold text-[#3B3D53] text-[34px] ">45</div>
+                  </div>
+                );
+              })}
+
+            </section>
           </section>
         </section>
       </article>
@@ -89,8 +110,8 @@ export default function PerformanceDashboardMain() {
       <article
         className="relative 
           box-border p-4
-          w-full
-          min-h-[372px]
+          w-full max-w-[953px] // TODO : max-width 추후 삭제, 크기 맞춰야
+          
           bg-[#FFFFFF] rounded-[15px] shadow-md 
           border-[#DEEBEF] border-solid border-2
           flex flex-col gap-y-5
