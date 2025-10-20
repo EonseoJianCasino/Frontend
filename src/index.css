@@ -1,3 +1,4 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -5,7 +6,6 @@
 @layer base {
   :root {
     color-scheme: light;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
   *,
@@ -15,10 +15,15 @@
   }
 
   body {
-    @apply m-0 min-h-screen;
+    font-family: "Pretendard Variable", Pretendard, -apple-system, BlinkMacSystemFont, "Segoe UI",
+      sans-serif;
+    @apply m-0;
   }
 
-  #root {
-    @apply min-h-screen;
+  /* Popup route */
+  html.is-popup,
+  html.is-popup body,
+  html.is-popup #root {
+    background-color: #DEEBEF;
   }
 }
