@@ -1,3 +1,5 @@
 {
-  "tailwindCSS.tailwindConfigPath": "tailwind.config.cjs"
+  "tailwindCSS.tailwindConfigPath": "tailwind.config.cjs",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true
 }
