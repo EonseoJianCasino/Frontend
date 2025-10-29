@@ -27,7 +27,7 @@
   }
 
   .layout_brandIcon {
-    @apply w-6 h-6 object-contain shrink-0;
+    @apply h-6 w-6 shrink-0 object-contain;
   }
 
   .layout_brandText {
@@ -43,7 +43,7 @@
 
   /* 링크 */
   .layout_link {
-    @apply block ml-2 px-3 py-2.5 mt-2 text-gray-500 tracking-wider text-base font-bold rounded-md hover:bg-slate-50;
+    @apply ml-2 mt-2 block rounded-md px-3 py-2.5 text-base font-bold tracking-wider text-gray-500 hover:bg-slate-50;
   }
 
   .layout_link.is-active {

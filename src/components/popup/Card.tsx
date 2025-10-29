@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react'
 
 type CardProps = {
-  title?: React.ReactNode;
-  children?: React.ReactNode;
-  className?: string;
-};
+  title?: React.ReactNode
+  children?: React.ReactNode
+  className?: string
+}
 
 export default function Card({ title, children }: CardProps) {
   return (
@@ -14,6 +14,5 @@ export default function Card({ title, children }: CardProps) {
         {children}
       </div>
     </div>
-  );
+  )
 }
-

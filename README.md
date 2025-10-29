@@ -5,13 +5,9 @@ Vite + React + TypeScript로 구현한 Chrome 확장프로그램입니다.
 ## 개발 환경 실행
 
 1. 의존성 설치
-   `
-   npm install
-   `
+   `npm install`
 2. 개발 서버 실행
-   `
-   npm run dev
-   `
+   `npm run dev`
 3. Chrome 확장 로드
    - chrome://extensions 이동 후 **개발자 모드**를 켭니다.
    - **압축해제된 확장 프로그램을 로드** → 프로젝트의 dist/ 폴더를 선택합니다.
@@ -22,9 +18,7 @@ Vite + React + TypeScript로 구현한 Chrome 확장프로그램입니다.
 ## 프로덕션 빌드 & 배포
 
 1. 최종 번들 생성
-   `
-   npm run build
-   `
+   `npm run build`
    - dist/에 배포용 파일이 생성됩니다.
 2. Chrome에 배포판 로드
    - chrome://extensions → dist/ 선택

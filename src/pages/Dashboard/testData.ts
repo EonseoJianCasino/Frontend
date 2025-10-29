@@ -1,43 +1,43 @@
 interface testDataType {
-  name: string;
-  uv: number;
-  pv: number;
-  amt: number;
+  name: string
+  uv: number
+  pv: number
+  amt: number
 }
 
 const testData: testDataType[] = [
   {
-    name: "Page A",
+    name: 'Page A',
     uv: 4000,
     pv: 35,
     amt: 2400,
   },
   {
-    name: "Page B",
+    name: 'Page B',
     uv: 3000,
     pv: 50,
     amt: 2210,
   },
   {
-    name: "Page C",
+    name: 'Page C',
     uv: 2000,
     pv: 70,
     amt: 2290,
   },
   {
-    name: "Page D",
+    name: 'Page D',
     uv: 2780,
     pv: 40,
     amt: 2000,
   },
   {
-    name: "Page D",
+    name: 'Page D',
     uv: 2780,
     pv: 40,
     amt: 2000,
   },
   {
-    name: "Page D",
+    name: 'Page D',
     uv: 2780,
     pv: 40,
     amt: 2000,
@@ -475,8 +475,8 @@ const testData: testDataType[] = [
   //   pv: 4300,
   //   amt: 2100,
   // },
-];
+]
 
 // console.log(testData);
 
-export default testData;
+export default testData

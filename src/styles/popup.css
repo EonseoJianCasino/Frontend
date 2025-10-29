@@ -2,38 +2,38 @@
 
 @layer components {
   .popup_container {
-    @apply w-[320px] h-[342px] box-border overflow-hidden -mt-px flex flex-col;
+    @apply -mt-px box-border flex h-[342px] w-[320px] flex-col overflow-hidden;
   }
 
   .popup_header {
-    @apply flex ml-5;
+    @apply ml-5 flex;
   }
 
   .popup_title {
-    @apply text-base font-bold mt-1;
-    color: #3A7CA5;
+    @apply mt-1 text-base font-bold;
+    color: #3a7ca5;
   }
 
   .popup_logo {
-    @apply w-8 mr-3;
+    @apply mr-3 w-8;
   }
 
   .popup_cardSection {
-    @apply flex-1 px-6 pt-5 pb-5 box-border;
+    @apply box-border flex-1 px-6 pb-5 pt-5;
   }
 
   .popup_card {
-    @apply w-full h-full bg-white rounded-2xl shadow-md overflow-hidden;
+    @apply h-full w-full overflow-hidden rounded-2xl bg-white shadow-md;
   }
 
   .popup_cardHeader {
-    @apply w-full flex font-bold text-lg justify-center h-12 items-center;
-    background-color: #F8F9FA;
-    color: #3A7CA5;
+    @apply flex h-12 w-full items-center justify-center text-lg font-bold;
+    background-color: #f8f9fa;
+    color: #3a7ca5;
   }
 
   .popup_loading_spinner {
-    @apply w-16 h-16 rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5] animate-spin;
+    @apply h-16 w-16 animate-spin rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5];
   }
 
   .popup_loading_text {
@@ -44,43 +44,43 @@
   /* Info Box */
   .popup_infoBox {
     @apply mt-6 flex items-center rounded-xl px-4 py-4 shadow-sm;
-    background-color: #F8F9FA;
+    background-color: #f8f9fa;
     width: 200px;
     margin-left: auto;
     margin-right: auto;
   }
 
   .popup_infoText {
-    @apply min-w-0 flex-1 flex flex-col gap-2;
+    @apply flex min-w-0 flex-1 flex-col gap-2;
   }
 
   .popup_infoLabel {
-    @apply text-[10px] font-normal leading-none uppercase;
+    @apply text-[10px] font-normal uppercase leading-none;
     color: #888888;
   }
 
   .popup_infoValue {
-    @apply block text-[12px] font-semibold truncate pr-1;
-    color: #4B4B4B;
+    @apply block truncate pr-1 text-[12px] font-semibold;
+    color: #4b4b4b;
   }
 
   /* btn */
   .popup_btn_submit {
-    @apply px-4 w-auto h-10 text-sm text-white font-semibold rounded-xl shadow-md transition-colors;
+    @apply h-10 w-auto rounded-xl px-4 text-sm font-semibold text-white shadow-md transition-colors;
   }
 
   .popup_btn_background {
-    @apply bg-gradient-to-r from-[#0194C9] to-[#2E739E] hover:from-[#0288B3] hover:to-[#286A8E] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#2E739E] disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply bg-gradient-to-r from-[#0194C9] to-[#2E739E] hover:from-[#0288B3] hover:to-[#286A8E] focus:outline-none focus:ring-2 focus:ring-[#2E739E] focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
 
   .popup_btn_secondary {
-    @apply px-4 w-auto h-10 text-sm text-white font-semibold rounded-xl shadow-md bg-[#4B4B4B] hover:bg-[#3E3E3E] focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#4B4B4B];
+    @apply h-10 w-auto rounded-xl bg-[#4B4B4B] px-4 text-sm font-semibold text-white shadow-md hover:bg-[#3E3E3E] focus:outline-none focus:ring-2 focus:ring-[#4B4B4B] focus:ring-offset-2;
   }
 
   /* Result Page */
   .popup_metric_box {
-    @apply rounded-2xl px-4 py-2 shadow-sm border border-slate-100  w-[240px] mx-auto;
-    background-color: #F8F9FA;
+    @apply mx-auto w-[240px] rounded-2xl border border-slate-100 px-4 py-2 shadow-sm;
+    background-color: #f8f9fa;
   }
 
   .popup_metric_grid {
@@ -96,20 +96,20 @@
   }
 
   .popup_status_bad {
-    @apply inline-flex items-center justify-center w-4 h-4 rounded-full text-white text-[10px] font-bold bg-[#FF5A5A];
+    @apply inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#FF5A5A] text-[10px] font-bold text-white;
   }
 
   .popup_status_good {
-    @apply inline-flex items-center justify-center w-4 h-4 rounded-full text-white text-[10px] font-bold bg-[#2E739E];
+    @apply inline-flex h-4 w-4 items-center justify-center rounded-full bg-[#2E739E] text-[10px] font-bold text-white;
   }
 
   .popup_progress {
-    @apply relative w-full h-2 rounded-full overflow-hidden;
-    background-color: #E6E9EE;
+    @apply relative h-2 w-full overflow-hidden rounded-full;
+    background-color: #e6e9ee;
   }
 
   .popup_progress_bar {
     @apply absolute left-0 top-0 h-full rounded-full;
-    background-color: #2E739E;
+    background-color: #2e739e;
   }
 }
