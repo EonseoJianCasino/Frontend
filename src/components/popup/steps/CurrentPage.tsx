@@ -1,17 +1,17 @@
-import copyIcon from "@/assets/icons/copy.svg";
+import copyIcon from '@/assets/icons/copy.svg'
 type CurrentPageProps = {
-  onNext: () => void;
-};
+  onNext: () => void
+}
 
 export default function CurrentPage({ onNext }: CurrentPageProps) {
   const url =
-    "https://example.com/very/long/path/with/many/segments/and?query=param&another=long#hash-section";
+    'https://example.com/very/long/path/with/many/segments/and?query=param&another=long#hash-section'
 
   const copy = async () => {
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(url)
     } catch {}
-  };
+  }
 
   return (
     <>
@@ -24,11 +24,11 @@ export default function CurrentPage({ onNext }: CurrentPageProps) {
           <img src={copyIcon} alt="copy" width={18} />
         </button>
       </div>
-      <div className="flex justify-center mt-6">
+      <div className="mt-6 flex justify-center">
         <button type="button" onClick={onNext} className="popup_btn_submit popup_btn_background">
           성능 & 보안 분석 실행
         </button>
       </div>
     </>
-  );
+  )
 }

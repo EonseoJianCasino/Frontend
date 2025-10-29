@@ -1,11 +1,11 @@
 // src/components/Sidebar.tsx
-import { NavLink, Outlet } from "react-router-dom";
-import "@/styles/sidebar.css";
-import logo from "@/assets/logo.svg";
+import { NavLink, Outlet } from 'react-router-dom'
+import '@/styles/sidebar.css'
+import logo from '@/assets/logo.svg'
 
 // NavLink
 const getNavLink = ({ isActive }: { isActive: boolean }) =>
-  isActive ? "layout_link is-active" : "layout_link";
+  isActive ? 'layout_link is-active' : 'layout_link'
 
 export default function Sidebar() {
   return (
@@ -35,5 +35,5 @@ export default function Sidebar() {
         <Outlet />
       </section>
     </div>
-  );
+  )
 }

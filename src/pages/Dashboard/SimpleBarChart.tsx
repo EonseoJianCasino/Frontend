@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react'
 import {
   Label,
   BarChart,
@@ -9,46 +9,41 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-} from "recharts";
-import testData from "./testData.ts";
-import styles from "./Charts.module.scss";
+} from 'recharts'
+import testData from './testData.ts'
+import styles from './Charts.module.scss'
 
-import type { ChartProps } from "../../types/Chart.types.ts";
+import type { ChartProps } from '../../types/Chart.types.ts'
 
 // color : 컬러 입력 가능 (기본값)
 /** color : 차트 색, dataKey : 차트  데이터 기준 // title : 바차트 이름  */
 const SimpleBarChart: React.FC<ChartProps> = ({
   data = testData,
-  color = "#59A5F5",
-  dataKey = "pv",
-  title = "ChartName",
-  name = "name",
-  yLabel = "yLabel",
+  color = '#59A5F5',
+  dataKey = 'pv',
+  title = 'ChartName',
+  name = 'name',
+  yLabel = 'yLabel',
 }) => {
   return (
     // 반응형 컨테이너 만들기
     <div className={styles.screen}>
       <ResponsiveContainer className={styles.responsive_container}>
         {/* 바차트 컨테이너 */}
-        <BarChart
-          className={styles.chart_container}
-          width={500}
-          height={300}
-          data={data}
-        >
+        <BarChart className={styles.chart_container} width={500} height={300} data={data}>
           {/* 네모네모 */}
           <CartesianGrid strokeDasharray="3 3" stroke="#cccccc" />
           {/* x축  기준*/}
           <XAxis dataKey={name} stroke="#5C5C5C">
             <Label
               className={styles.chart_label_title}
-              value={title || ""}
+              value={title || ''}
               offset={0}
               position="insideBottom"
             />
           </XAxis>
           <YAxis
-            label={{ value: { yLabel }, angle: -90, position: "insideLeft" }}
+            label={{ value: { yLabel }, angle: -90, position: 'insideLeft' }}
             stroke="#5C5C5C"
           />
           {/* 툴팁 */}
@@ -68,10 +63,10 @@ const SimpleBarChart: React.FC<ChartProps> = ({
         <></>
       )} */}
     </div>
-  );
-};
+  )
+}
 
-export default SimpleBarChart;
+export default SimpleBarChart
 
 // interface ChartProps {
 //     data?: Array<Record<string, any>>; //data는 객체 배열이지만 아이템의 형태는 유연하다

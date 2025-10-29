@@ -1,11 +1,11 @@
 type ResultPageProps = {
-  onOpenDetail: () => void;
-  onPrev: () => void;
-};
+  onOpenDetail: () => void
+  onPrev: () => void
+}
 
 export default function ResultPage({ onOpenDetail, onPrev }: ResultPageProps) {
-  const performance = 20;
-  const security = 60;
+  const performance = 20
+  const security = 60
 
   return (
     <div className="flex flex-col gap-4">
@@ -40,12 +40,12 @@ export default function ResultPage({ onOpenDetail, onPrev }: ResultPageProps) {
           className="popup_btn_submit popup_btn_background"
           onClick={onOpenDetail}
         >
-          자세히 보기 
+          자세히 보기
         </button>
         <button type="button" onClick={onPrev} className="popup_btn_secondary">
           다시 측정하기 ↻
         </button>
       </div>
     </div>
-  );
+  )
 }
