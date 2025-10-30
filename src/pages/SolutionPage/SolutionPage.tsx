@@ -1,5 +1,4 @@
-import ArrowRight from './imgs/arrowRight.svg'
-
+import ArrowRight from '../../assets/icons/arrowRight.svg'
 export default function SolutionPage() {
   return (
     // TODO : 차트 동적으로 되게, 더 동글동글하게 ui 바꿔야함

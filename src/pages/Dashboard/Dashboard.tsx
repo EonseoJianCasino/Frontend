@@ -1,9 +1,9 @@
 import React from 'react'
 import SimpleBarChart from './SimpleBarChart'
 import testData from './testData'
-import img_error from './imgs/error.svg'
-import img_ok from './imgs/ok.svg'
-import img_warning from './imgs/warning.svg'
+import img_error from '../../assets/icons/error.svg'
+import img_ok from '../../assets/icons/ok.svg'
+import img_warning from '../../assets/icons/warning.svg'
 import CustomBarChart from './CustomBarChart'
 
 export default function PerformanceDashboardMain() {
