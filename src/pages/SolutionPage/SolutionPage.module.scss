@@ -1,0 +1,25 @@
+@tailwind components;
+
+@layer components {
+  // 단계별 개선 방안
+  .step_solution_container {
+    @apply relative box-border flex w-full max-w-[974px] flex-col items-center justify-around rounded-[15px] border-2 border-solid border-[#DEEBEF] bg-[#FFFFFF] p-4 shadow-md;
+
+    // 단계별 개선 방안 이름
+    .title {
+      @apply mr-auto box-border text-[20px] font-semibold text-[#4B4B4B];
+    }
+
+    // 개선 방안
+    .sub_container {
+      @apply relative box-border flex w-full max-w-[974px] flex-col items-start justify-around gap-y-2 rounded-[15px] border-2 border-solid bg-[#FAFBFC] p-4 shadow-md;
+      .sub_title {
+        @apply box-border text-[16px] font-semibold text-[#4B4B4B];
+      }
+
+      .sub_summary {
+        @apply box-border text-[16px] text-[#747474];
+      }
+    }
+  }
+}
