@@ -40,30 +40,34 @@ export default function SolutionPage() {
           <h2 className={styles.title}>단계별 개선 방안</h2>
 
           <section className={styles.sub_container}>
-            <div>
-              <span>긴급</span>
-            </div>
+            <div className={styles.state}>긴급</div>
             <h3 className={styles.sub_title}>CLS(레이아웃 이동) 최적화</h3>
             <p className={styles.sub_summary}>
               이미지와 광고 영역의 크기를 미리 지정하여 레이아웃 이동을 방지합니다. 현재 0.25에서
               0.08로 개선 가능합니다.
             </p>
 
-            <div>
-              <div>
+            <section className={styles.sub_effect_container}>
+              <article className={styles.inner_item}>
                 <h4>예상 개선 효과</h4>
-                <div>성능 점수 +15점</div>
-              </div>
-              <div>
+                <div className={styles.description}>성능 점수 +15점</div>
+              </article>
+              <article className={styles.inner_item}>
                 <h4>연관 지표</h4>
-                <div>
-                  <div>LCP</div>
-                  <div>CLS</div>
+                <div className={styles.indicator_container}>
+                  <div className={styles.item}>LCP</div>
+                  <div className={styles.item}>CLS</div>
                 </div>
-              </div>
-            </div>
+              </article>
+            </section>
 
-            <div>자세히 보기 {'>'}</div>
+            <section className={styles.detail_container}>
+              <h4>상세 개선 방안</h4>
+              <div className={styles.inner_item}>
+                설명설명.......설명설명.......설명설명.......설명설명.......설명설명.......설명설명.
+              </div>
+            </section>
+            <div className={styles.btn_detail}>자세히 보기 {'>'}</div>
           </section>
         </article>
       </section>
