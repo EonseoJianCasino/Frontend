@@ -8,4 +8,5 @@ export default defineManifest(() => ({
     default_popup: 'index.html#/popup',
   },
   permissions: ['tabs'],
+  host_permissions: ['http://localhost:8080/*'],
 }))
