@@ -6,6 +6,7 @@ import { fileURLToPath, URL } from 'node:url'
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
+  // manifest.config.ts에서 환경 변수를 사용하기 위해 process.env에 주입
   Object.assign(process.env, env)
 
   return {
