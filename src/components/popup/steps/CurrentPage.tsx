@@ -1,17 +1,24 @@
 import copyIcon from '@/assets/icons/copy.svg'
+import { useEffect, useState } from 'react'
 type CurrentPageProps = {
   onNext: () => void
 }
 
 export default function CurrentPage({ onNext }: CurrentPageProps) {
-  const url =
-    'https://example.com/very/long/path/with/many/segments/and?query=param&another=long#hash-section'
-
+  const [url, setUrl] = useState('')
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(url)
     } catch {}
   }
+  useEffect(() => {
+    chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+      const activeTab = tabs[0]
+      if (activeTab?.url) {
+        setUrl(activeTab.url)
+      }
+    })
+  })
 
   return (
     <>
