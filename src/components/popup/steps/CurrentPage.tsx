@@ -1,10 +1,23 @@
 import copyIcon from '@/assets/icons/copy.svg'
 import { useEffect, useState } from 'react'
+import { createTest } from '@/api/test'
+
 type CurrentPageProps = {
   onNext: () => void
 }
 
 export default function CurrentPage({ onNext }: CurrentPageProps) {
+  const Click = async () => {
+    onNext()
+    try {
+      const res = await createTest(url)
+      console.log('CreateTest : ', res)
+      await chrome.storage.local.set({ curTest: res })
+    } catch (e) {
+      console.error('CreateTest error: ', e)
+    }
+  }
+
   const [url, setUrl] = useState('')
   const copy = async () => {
     try {
@@ -32,7 +45,7 @@ export default function CurrentPage({ onNext }: CurrentPageProps) {
         </button>
       </div>
       <div className="mt-6 flex justify-center">
-        <button type="button" onClick={onNext} className="popup_btn_submit popup_btn_background">
+        <button type="button" onClick={Click} className="popup_btn_submit popup_btn_background">
           성능 & 보안 분석 실행
         </button>
       </div>
