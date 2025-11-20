@@ -70,4 +70,12 @@
       }
     }
   }
+
+  // 개선 기대효과
+  .solution_container {
+    @apply flex w-[974px] flex-col gap-y-2;
+    .title {
+      @apply mr-auto box-border text-[20px] font-semibold text-[#4B4B4B];
+    }
+  }
 }
