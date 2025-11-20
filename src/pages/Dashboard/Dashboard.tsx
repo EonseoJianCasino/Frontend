@@ -1,7 +1,12 @@
-import img_error from '../../assets/icons/error.svg'
-import img_ok from '../../assets/icons/ok.svg'
-import img_warning from '../../assets/icons/warning.svg'
+import img_error from '@/assets/icons/error.svg'
+import img_ok from '@/assets/icons/ok.svg'
+import img_warning from '@/assets/icons/warning.svg'
+import img_fire from '@/assets/icons/fire.svg'
+import img_sequrity from '@/assets/icons/sequrity.svg'
+
 import CustomBarChart from './CustomBarChart'
+import MetricSection from './Metric/MetricSection'
+import { performanceMetrics } from './Metric/Metric.data'
 
 export default function PerformanceDashboardMain() {
   return (
@@ -118,6 +123,16 @@ export default function PerformanceDashboardMain() {
             </div>
           </li>
         </ul>
+      </article>
+
+      {/* 성능 지표 & 보안 지표 */}
+      <article>
+        <MetricSection title="성능 지표" titleIcon={img_fire} metricDatas={performanceMetrics} />
+        <MetricSection
+          title="보안 지표"
+          titleIcon={img_sequrity}
+          metricDatas={performanceMetrics}
+        />
       </article>
     </main>
   )
