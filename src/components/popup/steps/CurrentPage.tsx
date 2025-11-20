@@ -1,6 +1,8 @@
 import copyIcon from '@/assets/icons/copy.svg'
 import { useEffect, useState } from 'react'
-import { createTest } from '@/api/test'
+import { createTest } from '@/apis/test'
+import { getWebVitals } from '@/utils/getWebVitals'
+import { saveWebVitals } from '@/apis/saveWebVitals'
 
 type CurrentPageProps = {
   onNext: () => void
@@ -8,11 +10,23 @@ type CurrentPageProps = {
 
 export default function CurrentPage({ onNext }: CurrentPageProps) {
   const Click = async () => {
-    onNext()
     try {
       const res = await createTest(url)
       console.log('CreateTest : ', res)
       await chrome.storage.local.set({ curTest: res })
+      onNext()
+      const webVitals = await getWebVitals()
+      console.log('WebVitals : ', webVitals)
+      console.log(res.testId)
+      const body = {
+        LCP: webVitals.LCP.value,
+        CLS: webVitals.CLS.value,
+        INP: webVitals.INP.value,
+        FCP: webVitals.FCP.value,
+        TTFB: webVitals.TTFB.value,
+      }
+      saveWebVitals(res.testId, body)
+      //todo : web‑vitals 수집 로직을 팝업이 아닌 페이지/콘텐츠 스크립트로 옮기기
     } catch (e) {
       console.error('CreateTest error: ', e)
     }

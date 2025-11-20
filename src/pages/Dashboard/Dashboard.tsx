@@ -2,8 +2,25 @@ import img_error from '../../assets/icons/error.svg'
 import img_ok from '../../assets/icons/ok.svg'
 import img_warning from '../../assets/icons/warning.svg'
 import CustomBarChart from './CustomBarChart'
+import { useEffect, useState } from 'react'
+
+type CurTest = {
+  message: string
+  testId: string
+  targetURL: string
+  domainName: string
+}
 
 export default function PerformanceDashboardMain() {
+  const [curTest, setCurTest] = useState<CurTest | null>(null)
+
+  useEffect(() => {
+    chrome.storage.local.get('curTest', (result) => {
+      console.log('Dashboard curTest:', result.curTest)
+      setCurTest(result.curTest ?? null)
+    })
+  }, [])
+
   return (
     <main className="flex w-full max-w-[1700px] flex-col items-center justify-center gap-y-6 bg-[#F5F9FA] px-6 py-6 lg:px-8">
       {/* 상단 메인 카드 */}

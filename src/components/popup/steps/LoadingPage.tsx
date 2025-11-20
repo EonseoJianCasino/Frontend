@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { waitForCoreReady } from '@/apis/waitForCoreReady'
 
 type LoadingPageProps = {
   onDone: () => void
@@ -6,10 +7,32 @@ type LoadingPageProps = {
 
 export default function LoadingPage({ onDone }: LoadingPageProps) {
   useEffect(() => {
-    const id = setTimeout(() => {
-      onDone()
-    }, 2000)
-    return () => clearTimeout(id)
+    let cancelled = false
+
+    chrome.storage.local.get('curTest', (result) => {
+      const curTest = result.curTest
+      console.log('Loading curTest : ', curTest)
+
+      if (!curTest || !curTest.testId) {
+        console.error('testId null in curTest')
+        return
+      }
+
+      waitForCoreReady(curTest.testId)
+        .then(() => {
+          if (cancelled) return
+          console.log('CORE_READY 응답 도착')
+          onDone()
+        })
+        .catch((e) => {
+          if (cancelled) return
+          console.error('waitForCoreReady error', e)
+        })
+    })
+
+    return () => {
+      cancelled = true
+    }
   }, [onDone])
 
   return (
