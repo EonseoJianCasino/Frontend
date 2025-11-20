@@ -8,6 +8,7 @@ import type { MetricItem } from './Metric.types'
  * @returns
  */
 export default function MetricCard({ metric, message, value, urgentStatus }: MetricItem) {
+  console.log(metric, urgentStatus)
   return (
     <article className="box-border flex w-full min-w-[400px] flex-row items-center justify-between rounded-[10px] border-[1px] border-solid border-[#EBEEEE] bg-[#F8F9FA] p-3 px-6">
       <div>
@@ -15,7 +16,19 @@ export default function MetricCard({ metric, message, value, urgentStatus }: Met
         <label className="text-[12px] font-semibold text-[#888888]">{message}</label>
       </div>
       <div className="box-border flex flex-row items-center gap-x-3">
-        {value && <div>{value} </div>}
+        {value && (
+          <span
+            className={`text-[16px] font-semibold ${
+              urgentStatus === 'GOOD'
+                ? 'text-[#357BFA]'
+                : urgentStatus === 'WARNING'
+                  ? 'text-[#FABF35]'
+                  : 'text-[#FF3C3C]'
+            }`}
+          >
+            {value}{' '}
+          </span>
+        )}
         <img
           src={
             urgentStatus === 'GOOD' ? img_ok : urgentStatus === 'WARNING' ? img_warning : img_error

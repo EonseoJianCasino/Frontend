@@ -20,6 +20,18 @@ export const performanceMetrics: MetricItem[] = [
     value: '0.25',
     urgentStatus: 'POOR',
   },
+  {
+    metric: 'CLS (Cumulative Layout Shift)',
+    message: '레이아웃 이동 정도',
+    value: '0.25',
+    urgentStatus: 'POOR',
+  },
+  {
+    metric: 'CLS (Cumulative Layout Shift)',
+    message: '레이아웃 이동 정도',
+    value: '0.25',
+    urgentStatus: 'POOR',
+  },
 ]
 
 // 예시 더미 데이터 (보안 지표)
