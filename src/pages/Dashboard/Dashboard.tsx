@@ -6,7 +6,7 @@ import img_sequrity from '@/assets/icons/sequrity.svg'
 
 import CustomBarChart from './CustomBarChart'
 import MetricSection from './Metric/MetricSection'
-import { performanceMetrics } from './Metric/Metric.data'
+import { performanceMetrics, securityMetrics } from './Metric/Metric.data'
 
 export default function PerformanceDashboardMain() {
   return (
@@ -126,13 +126,9 @@ export default function PerformanceDashboardMain() {
       </article>
 
       {/* 성능 지표 & 보안 지표 */}
-      <article>
+      <article className="box-border flex w-[956px] flex-row justify-between gap-x-4">
         <MetricSection title="성능 지표" titleIcon={img_fire} metricDatas={performanceMetrics} />
-        <MetricSection
-          title="보안 지표"
-          titleIcon={img_sequrity}
-          metricDatas={performanceMetrics}
-        />
+        <MetricSection title="보안 지표" titleIcon={img_sequrity} metricDatas={securityMetrics} />
       </article>
     </main>
   )
