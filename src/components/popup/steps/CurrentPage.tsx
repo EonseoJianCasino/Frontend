@@ -15,15 +15,15 @@ export default function CurrentPage({ onNext }: CurrentPageProps) {
       console.log('CreateTest : ', res)
       await chrome.storage.local.set({ curTest: res })
       onNext()
-      const webVitals = await getWebVitals()
-      console.log('WebVitals : ', webVitals)
-      console.log(res.testId)
+      //const webVitals = await getWebVitals()
+      //console.log('WebVitals : ', webVitals)
+      //console.log(res.testId)
       const body = {
-        LCP: webVitals.LCP.value,
-        CLS: webVitals.CLS.value,
-        INP: webVitals.INP.value,
-        FCP: webVitals.FCP.value,
-        TTFB: webVitals.TTFB.value,
+        LCP: 1,
+        CLS: 1,
+        INP: 1,
+        FCP: 1,
+        TTFB: 1,
       }
       saveWebVitals(res.testId, body)
       //todo : web‑vitals 수집 로직을 팝업이 아닌 페이지/콘텐츠 스크립트로 옮기기

@@ -13,7 +13,11 @@ export default defineManifest(() => {
     action: {
       default_popup: 'index.html#/popup',
     },
-    permissions: ['tabs', 'storage'],
+    permissions: ['tabs', 'storage', 'scripting'],
     host_permissions: [hostPermission],
+    background: {
+      service_worker: 'src/background.ts',
+      type: 'module',
+    },
   }
 })
