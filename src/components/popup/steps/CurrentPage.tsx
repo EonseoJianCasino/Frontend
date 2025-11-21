@@ -45,7 +45,7 @@ export default function CurrentPage({ onNext }: CurrentPageProps) {
         setUrl(activeTab.url)
       }
     })
-  })
+  }, [])
 
   return (
     <>
