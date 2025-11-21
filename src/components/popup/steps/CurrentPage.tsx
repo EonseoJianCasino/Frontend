@@ -36,7 +36,7 @@ export default function CurrentPage({ onNext }: CurrentPageProps) {
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(url)
-    } catch {}
+    } catch (e) { console.error('Failed to copy URL to clipboard:', e) }
   }
   useEffect(() => {
     chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
