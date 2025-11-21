@@ -1,6 +1,6 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
-export async function waitForCoreReady(testId: String) {
+export async function waitForCoreReady(testId: string) {
   const url = `${BASE_URL}/api/tests/${testId}/wait?topic=CORE_READY&timeoutSec=60`
 
   const response = await fetch(url)
