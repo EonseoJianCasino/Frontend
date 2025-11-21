@@ -12,30 +12,30 @@ export function getWebVitals(): Promise<WebVitals> {
   const result: Partial<WebVitals> = {}
 
   const promise = new Promise<WebVitals>((resolve) => {
-    const Done = () => {
+    const done = () => {
       if (result.CLS && result.FCP && result.INP && result.LCP && result.TTFB) {
         resolve(result as WebVitals)
       }
     }
     onCLS((metric) => {
       result.CLS = metric
-      Done()
+      done()
     })
     onFCP((metric) => {
       result.FCP = metric
-      Done()
+      done()
     })
     onINP((metric) => {
       result.INP = metric
-      Done()
+      done()
     })
     onLCP((metric) => {
       result.LCP = metric
-      Done()
+      done()
     })
     onTTFB((metric) => {
       result.TTFB = metric
-      Done()
+      done()
     })
   })
   return promise
