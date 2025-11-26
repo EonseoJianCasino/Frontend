@@ -25,7 +25,7 @@ export default function LoadingPage({ onDone }: LoadingPageProps) {
       const curTest = result.curTest
       console.log('Loading curTest : ', curTest?.testId)
 
-      if (!curTest || !curTest) {
+      if (!curTest) {
         console.error('testId null in curTest')
         return
       }
