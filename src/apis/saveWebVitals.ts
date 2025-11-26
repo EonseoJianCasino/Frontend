@@ -1,6 +1,6 @@
 const BASE_URL = import.meta.env.VITE_API_BASE_URL
 
-type WebVitalsRequest = {
+export type WebVitalsRequest = {
   LCP: number
   CLS: number
   INP: number

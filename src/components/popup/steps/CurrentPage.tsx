@@ -1,34 +1,51 @@
 import copyIcon from '@/assets/icons/copy.svg'
 import { useEffect, useState } from 'react'
 import { createTest } from '@/apis/test'
-import { getWebVitals } from '@/utils/getWebVitals'
-import { saveWebVitals } from '@/apis/saveWebVitals'
 
 type CurrentPageProps = {
   onNext: () => void
 }
 
 export default function CurrentPage({ onNext }: CurrentPageProps) {
+  const [submitting, setSubmitting] = useState(false)
   const Click = async () => {
+    if (submitting) return
+    setSubmitting(true)
     try {
+      const startedAt = Date.now()
+
+      // 최신 활성 탭을 조회하여 http/https인 경우에만 진행
+      const resolvedTab = await new Promise<chrome.tabs.Tab | null>((resolve) => {
+        chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+          if (chrome.runtime.lastError) {
+            resolve(null)
+            return
+          }
+          resolve(tabs[0] ?? null)
+        })
+      })
+      const isHttpUrl = (u?: string) => !!u && (u.startsWith('http://') || u.startsWith('https://'))
+      if (!resolvedTab?.id || !isHttpUrl(resolvedTab.url)) {
+        alert(
+          '분석할 http/https 탭을 찾지 못했습니다. 대상 페이지를 활성화한 뒤 다시 실행해주세요.',
+        )
+        return
+      }
+
       const res = await createTest(url)
       console.log('CreateTest : ', res)
-      await chrome.storage.local.set({ curTest: res })
+      await chrome.storage.local.set({
+        curTest: res,
+        curTestStatus: 'loading',
+        curTestStatusUpdatedAt: startedAt,
+        curTestStartedAt: startedAt,
+      })
+      chrome.runtime.sendMessage({ type: 'RUN_WEB_VITALS', tabId: resolvedTab.id })
       onNext()
-      //const webVitals = await getWebVitals()
-      //console.log('WebVitals : ', webVitals)
-      //console.log(res.testId)
-      const body = {
-        LCP: 1,
-        CLS: 1,
-        INP: 1,
-        FCP: 1,
-        TTFB: 1,
-      }
-      saveWebVitals(res.testId, body)
-      //todo : web‑vitals 수집 로직을 팝업이 아닌 페이지/콘텐츠 스크립트로 옮기기
     } catch (e) {
       console.error('CreateTest error: ', e)
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -61,8 +78,13 @@ export default function CurrentPage({ onNext }: CurrentPageProps) {
         </button>
       </div>
       <div className="mt-6 flex justify-center">
-        <button type="button" onClick={Click} className="popup_btn_submit popup_btn_background">
-          성능 & 보안 분석 실행
+        <button
+          type="button"
+          onClick={Click}
+          className="popup_btn_submit popup_btn_background"
+          disabled={submitting}
+        >
+          {submitting ? '실행 중...' : '성능 & 보안 분석 실행'}
         </button>
       </div>
     </>
