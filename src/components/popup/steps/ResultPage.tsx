@@ -1,11 +1,43 @@
+import { getScore } from '@/apis/getScore'
+import { useEffect, useState } from 'react'
+import type { CurTest } from '@/types/Test.types'
+
 type ResultPageProps = {
   onOpenDetail: () => void
   onPrev: () => void
 }
 
+type Scores = {
+  totalScore: String
+  securityTotalScore: String
+  webTotalScore: String
+}
+
 export default function ResultPage({ onOpenDetail, onPrev }: ResultPageProps) {
-  const performance = 20
-  const security = 60
+  const [scores, setScores] = useState<Scores | null>(null)
+
+  useEffect(() => {
+    chrome.storage.local.get<{ curTest?: CurTest }>('curTest', (result) => {
+      const testId = result.curTest?.testId
+      if (!testId) {
+        console.log('Get Score 시 testId 불러오기 실패')
+        return
+      }
+
+      ;(async () => {
+        try {
+          const response = await getScore(testId)
+          console.log('점수 조회 성공', response)
+          setScores(response)
+        } catch (e) {
+          console.log('점수 조회 실패', e)
+        }
+      })()
+    })
+  }, [])
+
+  const performance = scores?.webTotalScore
+  const security = scores?.securityTotalScore
 
   return (
     <div className="flex flex-col gap-4">

@@ -1,42 +1,67 @@
-import { onCLS, onFCP, onINP, onLCP, onTTFB, type Metric } from 'web-vitals'
+import { onCLS, onFCP, onINP, onLCP, onTTFB } from 'web-vitals'
 
-export type WebVitals = {
-  CLS: Metric
-  FCP: Metric
-  INP: Metric
-  LCP: Metric
-  TTFB: Metric
-}
+export type MetricName = 'CLS' | 'FCP' | 'INP' | 'LCP' | 'TTFB'
 
-export function getWebVitals(): Promise<WebVitals> {
-  const result: Partial<WebVitals> = {}
+export type WebVitalsValues = Record<MetricName, number>
 
-  const promise = new Promise<WebVitals>((resolve) => {
+export function getWebVitals(
+  timeoutMs = 10000,
+  onMetric?: (name: MetricName, value: number) => void,
+): Promise<WebVitalsValues> {
+  const result: Partial<WebVitalsValues> = {}
+  let resolved = false
+
+  const resolveWithFallback = () => {
+    if (resolved) return
+    resolved = true
+    clearTimeout(timeoutId)
+    return {
+      CLS: result.CLS ?? 0,
+      FCP: result.FCP ?? 0,
+      INP: result.INP ?? 0,
+      LCP: result.LCP ?? 0,
+      TTFB: result.TTFB ?? 0,
+    }
+  }
+
+  const timeoutId = setTimeout(() => {
+    const data = resolveWithFallback()
+    if (data) {
+      resolver(data)
+    }
+  }, timeoutMs)
+
+  let resolver: (value: WebVitalsValues) => void
+  const promise = new Promise<WebVitalsValues>((resolve) => {
+    resolver = resolve
     const done = () => {
-      if (result.CLS && result.FCP && result.INP && result.LCP && result.TTFB) {
-        resolve(result as WebVitals)
+      if (
+        result.CLS != null &&
+        result.FCP != null &&
+        result.INP != null &&
+        result.LCP != null &&
+        result.TTFB != null
+      ) {
+        const data = resolveWithFallback()
+        if (data) resolver(data)
       }
     }
-    onCLS((metric) => {
-      result.CLS = metric
+    const handleMetric = (name: MetricName, value: number) => {
+      result[name] = value
+      try {
+        onMetric?.(name, value)
+      } catch {
+        // avoid breaking
+      }
       done()
-    })
-    onFCP((metric) => {
-      result.FCP = metric
-      done()
-    })
-    onINP((metric) => {
-      result.INP = metric
-      done()
-    })
-    onLCP((metric) => {
-      result.LCP = metric
-      done()
-    })
-    onTTFB((metric) => {
-      result.TTFB = metric
-      done()
-    })
+    }
+
+    onCLS((metric) => handleMetric('CLS', metric.value))
+    onFCP((metric) => handleMetric('FCP', metric.value))
+    onINP((metric) => handleMetric('INP', metric.value), { reportAllChanges: true })
+    onLCP((metric) => handleMetric('LCP', metric.value))
+    onTTFB((metric) => handleMetric('TTFB', metric.value))
   })
+
   return promise
 }

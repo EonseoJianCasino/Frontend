@@ -19,5 +19,16 @@ export default defineManifest(() => {
       service_worker: 'src/background.ts',
       type: 'module',
     },
+    // 주입은 버튼 클릭 시 배경 스크립트가 executeScript로 처리 (자동 주입 없음)
+    web_accessible_resources: [
+      {
+        matches: ['http://*/*', 'https://*/*'],
+        resources: [
+          'assets/webVitalsInject*.js', // 빌드 산출물
+          'src/content/webVitalsInject.ts',
+        ],
+        use_dynamic_url: false,
+      },
+    ],
   }
 })

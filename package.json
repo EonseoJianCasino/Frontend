@@ -15,8 +15,10 @@
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.9.1",
+    "react-slick": "^0.31.0",
     "recharts": "^3.2.1",
     "sass": "^1.93.2",
+    "slick-carousel": "^1.8.1",
     "web-vitals": "^5.1.0"
   },
   "devDependencies": {
