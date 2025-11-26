@@ -8,9 +8,9 @@ type ResultPageProps = {
 }
 
 type Scores = {
-  totalScore: String
-  securityTotalScore: String
-  webTotalScore: String
+  totalScore: string
+  securityTotalScore: string
+  webTotalScore: string
 }
 
 export default function ResultPage({ onOpenDetail, onPrev }: ResultPageProps) {
