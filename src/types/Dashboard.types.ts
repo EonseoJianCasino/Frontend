@@ -18,17 +18,18 @@ export interface DomainURLResponse {
 // ======================================
 
 // * 성능지표 API 타입
-export interface WebVitalItem {
+export interface Vital {
   metric: string //LCP
   message: string // 가장 큰 텍스트 블록/이미지가 화면에 나타나는 시간
   urgentStatus: 'GOOD' | 'WARNING' | 'POOR'
+  value?: string // 2.1초
 }
 
 export interface WebVitalItemResponse {
   success: {
     message: string
     data: {
-      items: WebVitalItem[]
+      items: Vital[]
     }
     createdAt: string
   }
@@ -36,18 +37,13 @@ export interface WebVitalItemResponse {
 
 // =======================================
 
-// * 보안 지표
-export interface SecurityVital {
-  metric: string //LCP
-  message: string // 가장 큰 텍스트 블록/이미지가 화면에 나타나는 시간
-  urgentStatus: 'GOOD' | 'WARNING' | 'POOR'
-}
+// * 보안 지표 (Vite 함께 사용)
 
 export interface SecurityVitalsResponse {
   success: {
     message: string
     data: {
-      items: SecurityVital[]
+      items: Vital[]
     }
     createdAt: string
   }

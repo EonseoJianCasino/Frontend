@@ -8,15 +8,16 @@ import CustomBarChart from './CustomBarChart'
 import MetricSection from './Metric/MetricSection'
 import { performanceMetrics, securityMetrics } from './Metric/Metric.data'
 import { useEffect, useState } from 'react'
-import { fetchAiPriority } from '@/apis/dashboardApis'
-import type { AiPriority } from '@/types/Dashboard.types'
+import { fetchAiPriority, fetchSecurityVitals, fetchWebVitals } from '@/apis/dashboardApis'
+import type { AiPriority, Vital } from '@/types/Dashboard.types'
 
 export default function PerformanceDashboardMain() {
   // TODO : 추후 테스트ID 동적으로  변경
   const testId: string = '33a74007-2d72-4684-b882-67cc42b27f36'
   // 변수 ====
   const [priorityData, setPriorityData] = useState<AiPriority[] | null>(null) // 우선 개선이 필요한 항목 데이터
-
+  const [webVitalData, setWebVitalData] = useState<Vital[]>(performanceMetrics) // 우선 개선이 필요한 항목 데이터
+  const [securityVitalData, setSecurityVitalData] = useState<Vital[]>(securityMetrics) // 우선 개선이 필요한 항목 데이터
   // ======
 
   // * 첫 렌더링 시 우선 개선사항 받아오기
@@ -31,8 +32,30 @@ export default function PerformanceDashboardMain() {
         console.error(error)
       }
     }
+    // * 성능지표, 보안지표 받아오기
+    const getWebVitals = async () => {
+      try {
+        const response = await fetchWebVitals(testId) // 대시보드/우선개선이 필요한 항목
+        setWebVitalData(response.success.data.items) // 우선 개선 항목만 나타남
+        console.log('성능지표', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const getSecurityVitals = async () => {
+      try {
+        const response = await fetchSecurityVitals(testId) // 대시보드/우선개선이 필요한 항목
+        setSecurityVitalData(response.success.data.items) // 우선 개선 항목만 나타남
+        console.log('보안지표', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
 
     getAiPriority()
+    getWebVitals()
+    getSecurityVitals()
   }, [])
 
   return (
@@ -126,8 +149,8 @@ export default function PerformanceDashboardMain() {
 
       {/* 성능 지표 & 보안 지표 */}
       <article className="box-border flex w-[956px] flex-row justify-between gap-x-4">
-        <MetricSection title="성능 지표" titleIcon={img_fire} metricDatas={performanceMetrics} />
-        <MetricSection title="보안 지표" titleIcon={img_sequrity} metricDatas={securityMetrics} />
+        <MetricSection title="성능 지표" titleIcon={img_fire} metricDatas={webVitalData} />
+        <MetricSection title="보안 지표" titleIcon={img_sequrity} metricDatas={securityVitalData} />
       </article>
     </main>
   )
