@@ -8,8 +8,14 @@ import CustomBarChart from './CustomBarChart'
 import MetricSection from './Metric/MetricSection'
 import { performanceMetrics, securityMetrics } from './Metric/Metric.data'
 import { useEffect, useState } from 'react'
-import { fetchAiPriority, fetchSecurityVitals, fetchWebVitals } from '@/apis/dashboardApis'
-import type { AiPriority, Vital } from '@/types/Dashboard.types'
+import {
+  fetchAiPriority,
+  fetchScoreTotal,
+  fetchSecurityVitals,
+  fetchURLandDomain,
+  fetchWebVitals,
+} from '@/apis/dashboardApis'
+import type { AiPriority, DomainURL, ScoreTotal, Vital } from '@/types/Dashboard.types'
 
 export default function PerformanceDashboardMain() {
   // TODO : 추후 테스트ID 동적으로  변경
@@ -18,6 +24,11 @@ export default function PerformanceDashboardMain() {
   const [priorityData, setPriorityData] = useState<AiPriority[] | null>(null) // 우선 개선이 필요한 항목 데이터
   const [webVitalData, setWebVitalData] = useState<Vital[]>(performanceMetrics) // 우선 개선이 필요한 항목 데이터
   const [securityVitalData, setSecurityVitalData] = useState<Vital[]>(securityMetrics) // 우선 개선이 필요한 항목 데이터
+
+  // 첫번째 차트 관련 블록
+  const [urlAndDomainData, setUrlAndDomainData] = useState<DomainURL | null>(null) // 도메인, url
+  const [scoreTotalData, setScoreTotalData] = useState<ScoreTotal | null>(null) // 도메인, url
+
   // ======
 
   // * 첫 렌더링 시 우선 개선사항 받아오기
@@ -53,9 +64,34 @@ export default function PerformanceDashboardMain() {
       }
     }
 
+    // * 최상단
+    // *대시보드 / URL 도메인 네임
+    const getURLandDomain = async () => {
+      try {
+        const response = await fetchURLandDomain(testId) // 대시보드/우선개선이 필요한 항목
+        setUrlAndDomainData(response?.success.data) // 우선 개선 항목만 나타남
+        console.log('대시보드 URL, 도메인 데이터', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    //* 대시보드 total 점수 받아오기
+    const getScoreTotal = async () => {
+      try {
+        const response = await fetchScoreTotal(testId) // 대시보드/우선개선이 필요한 항목
+        setScoreTotalData(response?.success?.data)
+        console.log('총점 score total 데이터', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    //
     getAiPriority()
     getWebVitals()
     getSecurityVitals()
+    getURLandDomain()
+    getScoreTotal()
   }, [])
 
   return (
@@ -83,9 +119,14 @@ export default function PerformanceDashboardMain() {
           <span className="absolute right-4 top-5 text-sm text-gray-500">
             <strong className="font-semibold text-[#3A7CA5]">10s </strong>측정 결과
           </span>
-          <h1 className="text-[30px] font-semibold">youtube.com</h1>
-          <a className="text-[12px] text-[#888888]" href="https://www.youtube.com">
-            https://www.youtube.com
+          <h1 className="text-[30px] font-semibold">
+            {urlAndDomainData?.domainName || 'youtube.com'}
+          </h1>
+          <a
+            className="text-[12px] text-[#888888]"
+            href={urlAndDomainData?.url || 'https://www.youtube.com'}
+          >
+            {urlAndDomainData?.url}
           </a>
         </header>
 
@@ -100,7 +141,9 @@ export default function PerformanceDashboardMain() {
             <section className="box-border flex min-h-[92px] w-[261px] flex-row items-center justify-around gap-x-4 rounded-[15px] bg-[#FFFFFF] shadow-md">
               <div className="h-16 w-16 rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5]"></div>
               <div className="flex flex-col justify-start gap-x-4">
-                <div className="text-[34px] font-semibold text-[#3B3D53]">65점</div>
+                <div className="text-[34px] font-semibold text-[#3B3D53]">
+                  {scoreTotalData?.totalScore || '-'}점
+                </div>
                 <div className="text-[14px] text-[#4B4B4B]">Total Score</div>
               </div>
             </section>

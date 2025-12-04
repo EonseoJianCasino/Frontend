@@ -1,6 +1,7 @@
 import type {
   AiPriorityResponse,
-  DomainURLItem,
+  DomainURLResponse,
+  ScoreTotalResponse,
   SecurityVitalsResponse,
   WebVitalItemResponse,
 } from '@/types/Dashboard.types'
@@ -12,7 +13,7 @@ import defaultAxios from './defaultAxios'
 // TODO : 차트 fetch 만들어야한다.
 
 //* 대시보드 / URL, 도메인 네임
-export const fetchURLandDomain = async (testId: string): Promise<DomainURLItem> => {
+export const fetchURLandDomain = async (testId: string): Promise<DomainURLResponse> => {
   try {
     const url = `/api/tests/${testId}`
     const response = await defaultAxios.get(url)
@@ -22,6 +23,7 @@ export const fetchURLandDomain = async (testId: string): Promise<DomainURLItem> 
     throw error
   }
 }
+
 // * 성능 지표
 export const fetchWebVitals = async (testId: string): Promise<WebVitalItemResponse> => {
   try {
@@ -47,7 +49,7 @@ export const fetchSecurityVitals = async (testId: string): Promise<SecurityVital
 }
 
 // * 대시보드 total 점수
-export const fetchScoreTotal = async (testId: string): Promise<SecurityVitalsResponse> => {
+export const fetchScoreTotal = async (testId: string): Promise<ScoreTotalResponse> => {
   try {
     const url = `/api/tests/${testId}/scores/total`
     const response = await defaultAxios.get(url)

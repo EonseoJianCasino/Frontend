@@ -1,5 +1,5 @@
 // * 대시보드 / url, 도메인 네임
-export interface DomainURLItem {
+export interface DomainURL {
   url: string //https://youtube.com
   domainName: string // youtube.com
   createdAt: string // 2025-11-19T02:48:56.478110129Z
@@ -9,9 +9,7 @@ export interface DomainURLItem {
 export interface DomainURLResponse {
   success: {
     message: string
-    data: {
-      items: DomainURLItem[]
-    }
+    data: DomainURL
     createdAt: string
   }
 }
@@ -61,9 +59,7 @@ export interface ScoreTotal {
 export interface ScoreTotalResponse {
   success: {
     message: string
-    data: {
-      items: ScoreTotal[]
-    }
+    data: ScoreTotal
     createdAt: string
   }
 }
