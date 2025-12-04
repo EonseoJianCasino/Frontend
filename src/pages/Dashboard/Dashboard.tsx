@@ -1,14 +1,40 @@
 import img_error from '@/assets/icons/error.svg'
-import img_ok from '@/assets/icons/ok.svg'
-import img_warning from '@/assets/icons/warning.svg'
+// import img_ok from '@/assets/icons/ok.svg'
+// import img_warning from '@/assets/icons/warning.svg'
 import img_fire from '@/assets/icons/fire.svg'
 import img_sequrity from '@/assets/icons/sequrity.svg'
 
 import CustomBarChart from './CustomBarChart'
 import MetricSection from './Metric/MetricSection'
 import { performanceMetrics, securityMetrics } from './Metric/Metric.data'
+import { useEffect, useState } from 'react'
+import { fetchAiPriority } from '@/apis/dashboardApis'
+import type { AiPriority } from '@/types/Dashboard.types'
 
 export default function PerformanceDashboardMain() {
+  // TODO : 추후 테스트ID 동적으로  변경
+  const testId: string = '33a74007-2d72-4684-b882-67cc42b27f36'
+  // 변수 ====
+  const [priorityData, setPriorityData] = useState<AiPriority[] | null>(null) // 우선 개선이 필요한 항목 데이터
+
+  // ======
+
+  // * 첫 렌더링 시 우선 개선사항 받아오기
+  useEffect(() => {
+    // * 우선 개선사항 받아오기
+    const getAiPriority = async () => {
+      try {
+        const response = await fetchAiPriority(testId) // 대시보드/우선개선이 필요한 항목
+        setPriorityData(response.success.data.topPriorities) // 우선 개선 항목만 나타남
+        console.log('우선개선사항', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    getAiPriority()
+  }, [])
+
   return (
     <main className="flex w-full max-w-[1700px] flex-col items-center justify-center gap-y-6 bg-[#F5F9FA] px-6 py-6 lg:px-8">
       {/* 상단 메인 카드 */}
@@ -81,43 +107,21 @@ export default function PerformanceDashboardMain() {
           🚨 우선 개선이 필요한 항목
         </h2>
         {/* 
-          // TODO : 상태에 따라 색상에 바뀌게 만들 것이다. (soft하게 만들기)
+          // TODO : img, 상태에 따라 색상에 바뀌게 만들 것이다. (추후 수정된 데이터 받으면)
         */}
-        <ul className="flex flex-col gap-y-4">
-          <li className="box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 border-[#FF3C3C] bg-[#F8F9FA] px-4">
-            <img src={img_error} />
-            <div className="box-border flex h-full w-full flex-col justify-center">
-              <div className="text-[16px] font-semibold text-[#4B4B4B]">CSL 점수 개선이 필요</div>
-              <div className="text-[12px] font-semibold text-[#888888]">
-                레이아웃 이동으로 인한 사용자 경험 저하
-              </div>
-            </div>
-          </li>
-        </ul>
 
-        <ul className="flex flex-col gap-y-4">
-          <li className="box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 border-[#FABF35] bg-[#F8F9FA] px-4">
-            <img src={img_warning} />
-            <div className="box-border flex h-full w-full flex-col justify-center">
-              <div className="text-[16px] font-semibold text-[#4B4B4B]">보안 헤더 누락</div>
-              <div className="text-[12px] font-semibold text-[#888888]">
-                CSP, HTTPS 헤더가 설정되지 않음
+        {// border-[#FABF35]  border-[#357BFA]
+        priorityData?.map((item) => (
+          <ul className="flex flex-col gap-y-4">
+            <li className="box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 border-[#FF3C3C] bg-[#F8F9FA] px-4">
+              <img src={img_error} />
+              <div className="box-border flex h-full w-full flex-col justify-center">
+                <div className="text-[16px] font-semibold text-[#4B4B4B]">{item.targetName}</div>
+                <div className="text-[12px] font-semibold text-[#888888]">{item.reason}</div>
               </div>
-            </div>
-          </li>
-        </ul>
-
-        <ul className="flex flex-col gap-y-4">
-          <li className="box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 border-[#357BFA] bg-[#F8F9FA] px-4">
-            <img src={img_ok} />
-            <div className="box-border flex h-full w-full flex-col justify-center">
-              <div className="text-[16px] font-semibold text-[#4B4B4B]">SSL 인증서 만료 임박</div>
-              <div className="text-[12px] font-semibold text-[#888888]">
-                29일 후 만료 예정 - 갱신 준비 필요
-              </div>
-            </div>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        ))}
       </article>
 
       {/* 성능 지표 & 보안 지표 */}
