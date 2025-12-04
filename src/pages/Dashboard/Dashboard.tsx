@@ -1,7 +1,12 @@
-import img_error from '../../assets/icons/error.svg'
-import img_ok from '../../assets/icons/ok.svg'
-import img_warning from '../../assets/icons/warning.svg'
+import img_error from '@/assets/icons/error.svg'
+import img_ok from '@/assets/icons/ok.svg'
+import img_warning from '@/assets/icons/warning.svg'
+import img_fire from '@/assets/icons/fire.svg'
+import img_sequrity from '@/assets/icons/sequrity.svg'
+
 import CustomBarChart from './CustomBarChart'
+import MetricSection from './Metric/MetricSection'
+import { performanceMetrics, securityMetrics } from './Metric/Metric.data'
 
 export default function PerformanceDashboardMain() {
   return (
@@ -12,23 +17,18 @@ export default function PerformanceDashboardMain() {
           {/* 아이템  */}
           <div className="absolute -top-7 left-4 flex flex-row justify-start gap-x-4 text-[14px] text-sm font-semibold text-[#5C5C5C] text-gray-500">
             <div className="flex flex-row items-center justify-start">
-              <span className="mr-1 inline-block h-[7px] w-[7px] rounded-full bg-[#CCCCCC]"></span>
-              <span>OFF</span>
+              <span className="mr-1 inline-block h-[7px] w-[7px] rounded-full bg-[#357BFA]"></span>
+              <span>GOOD</span>
             </div>
 
             <div className="flex flex-row items-center justify-start">
-              <span className="mr-1 inline-block h-[7px] w-[7px] rounded-full bg-[#9EEDA7]"></span>
-              <span>ON</span>
+              <span className="mr-1 inline-block h-[7px] w-[7px] rounded-full bg-[#FABF35]"></span>
+              <span>WARNING</span>
             </div>
 
             <div className="flex flex-row items-center justify-start">
-              <span className="mr-1 inline-block h-[7px] w-[7px] rounded-full bg-[#ED9E9F]"></span>
-              <span>OFF</span>
-            </div>
-
-            <div className="flex flex-row items-center justify-start">
-              <span className="mr-1 inline-block h-[7px] w-[7px] rounded-full bg-[#FFE990]"></span>
-              <span>OFF</span>
+              <span className="mr-1 inline-block h-[7px] w-[7px] rounded-full bg-[#FF3C3C]"></span>
+              <span>POOR</span>
             </div>
           </div>
           <span className="absolute right-4 top-5 text-sm text-gray-500">
@@ -58,13 +58,13 @@ export default function PerformanceDashboardMain() {
             {/* 그리드 컴포넌트 2*3 */}
             <section className="grid h-full w-full grid-cols-3 grid-rows-2 gap-3 gap-4">
               {/* 카드 6개 */}
-              {[1, 2, 3, 4, 5, 6].map(() => {
+              {['LCP', 'CLS', 'INP', 'FCP', 'TTFB', 'sequrity'].map((item) => {
                 return (
                   // TODO : 추후에 데이터 넣어서 변경
                   <div className="border-box relative flex h-full w-full flex-col items-center justify-center rounded-[15px] p-2 shadow-md">
                     <div className="border-box absolute top-2 flex w-full flex-row items-center px-2">
-                      <div className="w-full text-[16px] text-[#83869A]">LCP</div>
-                      <span className="inline-block h-[10px] w-[10px] rounded-full bg-[#ED9E9F]"></span>
+                      <div className="w-full text-[16px] text-[#83869A]">{item}</div>
+                      <span className="inline-block h-[10px] w-[10px] rounded-full bg-[#FF3C3C]"></span>
                     </div>
                     <div className="text-[34px] font-semibold text-[#3B3D53]">45</div>
                   </div>
@@ -118,6 +118,12 @@ export default function PerformanceDashboardMain() {
             </div>
           </li>
         </ul>
+      </article>
+
+      {/* 성능 지표 & 보안 지표 */}
+      <article className="box-border flex w-[956px] flex-row justify-between gap-x-4">
+        <MetricSection title="성능 지표" titleIcon={img_fire} metricDatas={performanceMetrics} />
+        <MetricSection title="보안 지표" titleIcon={img_sequrity} metricDatas={securityMetrics} />
       </article>
     </main>
   )
