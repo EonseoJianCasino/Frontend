@@ -48,12 +48,12 @@ import type { ChartProps } from '../../types/Chart.types.ts'
 // * 커스텀 바 차트
 
 // 예시 데이터
-const data = [
-  { name: 'LCP', value: 35 },
-  { name: 'CLS', value: 50 },
-  { name: 'INP', value: 70 },
-  { name: 'TBT', value: 40 },
-]
+// const data = [
+//   { name: 'LCP', value: 35 },
+//   { name: 'CLS', value: 50 },
+//   { name: 'INP', value: 70 },
+//   { name: 'TBT', value: 40 },
+// ]
 
 // 🎨 막대 끝 원 + 숫자 커스텀 shape
 const CustomBar = (props: any) => {
