@@ -4,8 +4,17 @@ import Slider from 'react-slick'
 import 'slick-carousel/slick/slick.css'
 import 'slick-carousel/slick/slick-theme.css'
 import lightningImg from '../../assets/icons/lightning.svg'
+import { useEffect, useState } from 'react'
+import { fetchSolutions } from '@/apis/solutionApis'
+import type { MajorImprovement, Solution, SolutionResponse } from '@/types/Solution.types'
+
+// Props 선언
+interface SolutionSliderProps {
+  data: MajorImprovement[] | null
+}
+
 // * 개선방안 슬라이더
-const SolutionSlider: React.FC = () => {
+const SolutionSlider: React.FC<SolutionSliderProps> = ({ data }) => {
   const settings = {
     dots: true,
     infinite: true,
@@ -13,63 +22,68 @@ const SolutionSlider: React.FC = () => {
     slidesToShow: 3,
     slidesToScroll: 3,
   }
+
   return (
     <div className="slider-container mx-[1%] h-[230px] w-full">
       <Slider {...settings}>
-        {/* 
-        // TODO 추후 article 부분 소프트 코딩으로 변경 
-        
-        */}
-        <article className="box-border flex h-[225px] max-w-[95%] flex-1 flex-col rounded-[15px] bg-white p-10 shadow-md">
-          <div className="box-border flex h-[33px] w-[33px] items-center justify-center rounded-full bg-[#3B82F6]">
-            <img src={lightningImg} alt="번개" />
-          </div>
-          <div className="mt-2 pl-3 text-[21px] font-bold text-[#4B4B4B]">
-            <span className="text-[#3B82F6]">LCP</span> 0.8초 단축
-          </div>
-          <div className="mt-2 pl-3 text-[21px] font-bold text-[#707071]">
-            첫 화면 로딩이 빨라집니다.
-          </div>
-        </article>
-        <article className="box-border flex h-[225px] max-w-[95%] flex-1 flex-col rounded-[15px] bg-white p-10 shadow-md">
-          <div className="box-border flex h-[33px] w-[33px] items-center justify-center rounded-full bg-[#3B82F6]">
-            <img src={lightningImg} alt="번개" />
-          </div>
-          <div className="mt-2 pl-3 text-[21px] font-bold text-[#4B4B4B]">
-            <span className="text-[#3B82F6]">LCP</span> 0.8초 단축
-          </div>
-          <div className="mt-2 pl-3 text-[21px] font-bold text-[#707071]">
-            첫 화면 로딩이 빨라집니다.
-          </div>
-        </article>
-        <article className="box-border flex h-[225px] max-w-[95%] flex-1 flex-col rounded-[15px] bg-white p-10 shadow-md">
-          <div className="box-border flex h-[33px] w-[33px] items-center justify-center rounded-full bg-[#3B82F6]">
-            <img src={lightningImg} alt="번개" />
-          </div>
-          <div className="mt-2 pl-3 text-[21px] font-bold text-[#4B4B4B]">
-            <span className="text-[#3B82F6]">LCP</span> 0.8초 단축
-          </div>
-          <div className="mt-2 pl-3 text-[21px] font-bold text-[#707071]">
-            첫 화면 로딩이 빨라집니다.
-          </div>
-        </article>
-        <article className="box-border flex h-[225px] max-w-[95%] flex-1 flex-col rounded-[15px] bg-white p-10 shadow-md">
-          <div className="box-border flex h-[33px] w-[33px] items-center justify-center rounded-full bg-[#3B82F6]">
-            <img src={lightningImg} alt="번개" />
-          </div>
-          <div className="mt-2 pl-3 text-[21px] font-bold text-[#4B4B4B]">
-            <span className="text-[#3B82F6]">LCP</span> 0.8초 단축
-          </div>
-          <div className="mt-2 pl-3 text-[21px] font-bold text-[#707071]">
-            첫 화면 로딩이 빨라집니다.
-          </div>
-        </article>
+        {data?.map((item) => (
+          <article
+            key={item.description}
+            className="box-border flex h-[225px] max-w-[95%] flex-1 flex-col rounded-[15px] bg-white p-10 shadow-md"
+          >
+            <div className="box-border flex h-[33px] w-[33px] items-center justify-center rounded-full bg-[#3B82F6]">
+              <img src={lightningImg} alt="번개" />
+            </div>
+            <div className="mt-2 pl-3 text-[21px] font-bold text-[#4B4B4B]">
+              <span className="text-[#3B82F6]">{item.metric}</span> {item.title}
+            </div>
+            <div className="mt-2 pl-3 text-[21px] font-bold text-[#707071]">{item.description}</div>
+          </article>
+        ))}
       </Slider>
     </div>
   )
 }
 
 export default function SolutionPage() {
+  const testId: string = '7b0c17e3-8af6-4834-9507-0abdcdb62690'
+
+  // ! 변수 ===
+  // 기존 점수
+  const [beforeScore, setBeforeScore] = useState<number>(0)
+  // 개선 예상 점수
+  const [afterScore, setAfterScore] = useState<number>(0)
+  // 개선 예상 점수 +
+  const [afterScoreDetail, setAfterScoreDetail] = useState<number>(0)
+
+  // 개선 방안 - web바이탈
+  const [solutionWebVitalData, setSolutionWebVitalData] = useState<Solution[] | null>(null)
+  // 개선방안 - 보안
+  const [solutionSecurityData, setSolutionSecurityData] = useState<Solution[] | null>(null)
+  // 기대 효과
+  const [majorImprovementData, setMajorImprovementData] = useState<MajorImprovement[] | null>(null)
+
+  // * 첫 렌더링 시 API 호출
+  useEffect(() => {
+    // * 우선 개선사항 받아오기
+    const getSolutions = async () => {
+      try {
+        const response: SolutionResponse = await fetchSolutions(testId) // 대시보드/우선개선이 필요한 항목
+        setBeforeScore(response.success.data.overallTotalBefore) // 기존 점수
+        setAfterScore(response.success.data.overallTotalAfter) // 개선 예상 점수
+        setAfterScoreDetail(response.success.data.overallExpectedImprovement) // 개선 예상 점수 디테일
+        setSolutionWebVitalData(response.success.data.webElements) // 웹바이탈 개선방안
+        setSolutionSecurityData(response.success.data.securityMetrics) // 보안 개선방안
+        // TODO : 이 위에 5개 소프트하게 만들기
+        setMajorImprovementData(response.success.data.majorImprovements) // 기대 효과
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    getSolutions()
+  }, [])
+
   return (
     // TODO : 차트 동적으로 되게, 더 동글동글하게 ui 바꿔야함
     <main className="flex w-full max-w-[1700px] flex-col gap-y-6 bg-[#F5F9FA] px-6 py-6 lg:px-8">
@@ -143,7 +157,7 @@ export default function SolutionPage() {
         {/* 개선 기대효과 */}
         <article className={styles.solution_container}>
           <h2 className={styles.title}>개선 기대효과</h2>
-          <SolutionSlider />
+          <SolutionSlider data={majorImprovementData} />
         </article>
       </section>
     </main>

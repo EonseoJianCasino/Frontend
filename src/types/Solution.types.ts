@@ -31,14 +31,16 @@ export interface MajorImprovement {
 //* 전체 기대효과 & 개선방안 페이지
 export interface SolutionResponse {
   success: {
+    data: {
+      overallTotalBefore: number // 기존 점수
+      overallTotalAfter: number // 개선 예상 점수
+      overallExpectedImprovement: number // 개선 예상점수 오른부분
+
+      webElements: Solution[] // 개선 방안 ( 웹바이탈)
+      securityMetrics: Solution[] // 개선 방안 (보안)
+
+      majorImprovements: MajorImprovement[] // 기대효과 리스트
+    }
     message: string
-    overallExpectedImprovement: number // 개선 예상점수 오른부분
-    overallTotalAfter: number // 개선 예상 점수
-    overallTotalBefore: number // 기존 점수
-
-    webElements: Solution[] // 개선 방안 ( 웹바이탈)
-    securityMetrics: Solution[] // 개선 방안 (보안)
-
-    majorImprovements: MajorImprovement[] // 기대효과 리스트
   }
 }
