@@ -7,13 +7,14 @@ import lightningImg from '../../assets/icons/lightning.svg'
 import { useEffect, useState } from 'react'
 import { fetchSolutions } from '@/apis/solutionApis'
 import type { MajorImprovement, Solution, SolutionResponse } from '@/types/Solution.types'
+import type { CurTest } from '@/types/Test.types'
 
 // Props 선언
 interface SolutionSliderProps {
   data: MajorImprovement[] | null
 }
 
-// * 개선방안 슬라이더
+// ! 개선방안 슬라이더
 const SolutionSlider: React.FC<SolutionSliderProps> = ({ data }) => {
   const settings = {
     dots: true,
@@ -46,7 +47,9 @@ const SolutionSlider: React.FC<SolutionSliderProps> = ({ data }) => {
 }
 
 export default function SolutionPage() {
-  const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
+  // const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
+
+  const [testId, setTestId] = useState<string>('') // 테스트 ID
 
   // ! 변수 ===
   // 기존 점수
@@ -63,7 +66,7 @@ export default function SolutionPage() {
   // 기대 효과
   const [majorImprovementData, setMajorImprovementData] = useState<MajorImprovement[] | null>(null)
 
-  // * 첫 렌더링 시 API 호출
+  // * 테스트 ID 받아오면 API 호출
   useEffect(() => {
     // * 우선 개선사항 받아오기
     const getSolutions = async () => {
@@ -81,6 +84,14 @@ export default function SolutionPage() {
     }
 
     getSolutions()
+  }, [testId])
+
+  //* 첫 렌더링시 테스트 ID 받아오기
+  useEffect(() => {
+    if (typeof chrome === 'undefined' || !chrome.storage?.local) return
+    chrome.storage.local.get<{ curTest?: CurTest }>('curTest', ({ curTest }) => {
+      if (curTest?.testId) setTestId(curTest.testId)
+    })
   }, [])
 
   return (

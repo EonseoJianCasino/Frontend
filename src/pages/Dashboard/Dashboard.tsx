@@ -16,11 +16,12 @@ import {
   fetchWebVitals,
 } from '@/apis/dashboardApis'
 import type { AiPriority, DomainURL, ScoreTotal, Vital } from '@/types/Dashboard.types'
+import type { CurTest } from '@/types/Test.types'
 
 export default function PerformanceDashboardMain() {
-  // TODO : 추후 테스트ID 동적으로  변경
-  const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
-  // 변수 ====
+  // ! 변수 ====
+  const [testId, setTestId] = useState<string>('') // 테스트 ID
+
   const [priorityData, setPriorityData] = useState<AiPriority[] | null>(null) // 우선 개선이 필요한 항목 데이터
   const [webVitalData, setWebVitalData] = useState<Vital[]>(performanceMetrics) // 우선 개선이 필요한 항목 데이터
   const [securityVitalData, setSecurityVitalData] = useState<Vital[]>(securityMetrics) // 우선 개선이 필요한 항목 데이터
@@ -31,7 +32,15 @@ export default function PerformanceDashboardMain() {
 
   // ======
 
-  // * 첫 렌더링 시 우선 개선사항 받아오기
+  //* 첫 렌더링시 테스트 ID 받아오기
+  useEffect(() => {
+    if (typeof chrome === 'undefined' || !chrome.storage?.local) return
+    chrome.storage.local.get<{ curTest?: CurTest }>('curTest', ({ curTest }) => {
+      if (curTest?.testId) setTestId(curTest.testId)
+    })
+  }, [])
+
+  // * testID 받아오면 우선 개선사항 받아오기
   useEffect(() => {
     // * 우선 개선사항 받아오기
     const getAiPriority = async () => {
@@ -86,13 +95,13 @@ export default function PerformanceDashboardMain() {
         console.error(error)
       }
     }
-    //
+
     getAiPriority()
     getWebVitals()
     getSecurityVitals()
     getURLandDomain()
     getScoreTotal()
-  }, [])
+  }, [testId])
 
   return (
     <main className="flex w-full max-w-[1700px] flex-col items-center justify-center gap-y-6 bg-[#F5F9FA] px-6 py-6 lg:px-8">
