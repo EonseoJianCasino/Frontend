@@ -16,6 +16,7 @@ import {
 } from '@/apis/dashboardApis'
 import type { AiPriority, DomainURL, ScoreTotal, Vital } from '@/types/Dashboard.types'
 import type { CurTest } from '@/types/Test.types'
+import SimplePieChart from '@/components/Charts/SimplePieChart'
 
 export default function PerformanceDashboardMain() {
   // ! 변수 ====
@@ -147,7 +148,17 @@ export default function PerformanceDashboardMain() {
           {/* 카드섹션  */}
           <section className="flex flex-1 flex-col items-center gap-y-2">
             <section className="box-border flex min-h-[92px] w-[261px] flex-row items-center justify-around gap-x-4 rounded-[15px] bg-[#FFFFFF] shadow-md">
-              <div className="h-16 w-16 rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5]"></div>
+              {/* <div className="h-16 w-16 rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5]"></div> */}
+              <div className="h-16 w-16">
+                <SimplePieChart
+                  value={scoreTotalData?.totalScore}
+                  colors={['#3A7CA5', '#EDEBF0']}
+                  innerRadius={20}
+                  outerRadius={30}
+                  isValue={false}
+                />
+              </div>
+
               <div className="flex flex-col justify-start gap-x-4">
                 <div className="text-[34px] font-semibold text-[#3B3D53]">
                   {scoreTotalData?.totalScore || '-'}점

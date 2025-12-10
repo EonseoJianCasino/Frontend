@@ -7,6 +7,7 @@ import type { MajorImprovement, Solution, SolutionResponse } from '@/types/Solut
 import type { CurTest } from '@/types/Test.types'
 import SolutionSlider from './SolutionSlider'
 import SolutionCards from './SolutionCards'
+import SimplePieChart from '@/components/Charts/SimplePieChart'
 
 export default function SolutionPage() {
   // const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
@@ -75,20 +76,40 @@ export default function SolutionPage() {
           <section className="relative flex flex-col items-center gap-y-3">
             <h3 className="absolute -top-7 text-[14px] text-[#4B4B4B]">기존 점수</h3>
             {/* 도넛 */}
-            <div className="flex h-24 w-24 items-center justify-center rounded-full border-8 border-[#EDEBF0] border-t-[#FF3C3C]">
-              <div className="text-[30px] font-semibold text-[#000000]">{beforeScore}</div>
+            <div className="relative h-28 w-28">
+              <SimplePieChart
+                innerRadius={45}
+                outerRadius={55}
+                value={beforeScore}
+                colors={['#FF3C3C', '#EDEBF0']}
+              />
             </div>
+            {/* <div className="flex h-24 w-24 items-center justify-center rounded-full border-8 border-[#EDEBF0] border-t-[#FF3C3C]">
+              <div className="text-[30px] font-semibold text-[#000000]">{beforeScore}</div>
+            </div> */}
           </section>
           <img src={ArrowRight} alt="->" />
 
           <section className="relative flex flex-col items-center gap-y-3">
             <h3 className="absolute -top-7 text-[14px] text-[#4B4B4B]">개선 예상 점수</h3>
             {/* 도넛 */}
-            <div className="flex h-24 w-24 items-center justify-center rounded-full border-8 border-[#EDEBF0] border-t-[#3A7CA5]">
-              <div className="text-[30px] font-semibold text-[#000000]">{afterScore}</div>
+            <div className="relative h-28 w-28">
+              <SimplePieChart
+                innerRadius={45}
+                outerRadius={55}
+                value={afterScore}
+                colors={['#3A7CA5', '#EDEBF0']}
+              />
             </div>
+            {/* <div className="flex h-24 w-24 items-center justify-center rounded-full border-8 border-[#EDEBF0] border-t-[#3A7CA5]">
+              <div className="text-[30px] font-semibold text-[#000000]">{afterScore}</div>
+            </div> */}
             <span className="absolute -bottom-8 text-[16px] font-semibold text-[#3A7CA5]">
-              {afterScoreDetail}점 +
+              {afterScoreDetail}점
+            </span>
+            <span className="absolute -bottom-8 right-7 text-[16px] font-semibold text-[#3A7CA5]">
+              {' '}
+              +
             </span>
           </section>
         </article>
