@@ -46,10 +46,46 @@ const SolutionSlider: React.FC<SolutionSliderProps> = ({ data }) => {
   )
 }
 
+// ! 개선방안 카드
+interface SolutionProps {
+  data: Solution[] | null
+}
+
+export const SolutionCards: React.FC<SolutionProps> = ({ data }) => {
+  return data?.map((item) => (
+    <section className={styles.sub_container}>
+      <div className={`${styles.state} ${styles[item.status]}`}>{item.status}</div>
+      <h3 className={styles.sub_title}>{item.name}</h3>
+      <p className={styles.sub_summary}>{item.benefitSummary}</p>
+
+      <section className={styles.sub_effect_container}>
+        <article className={styles.inner_item}>
+          <h4>예상 개선 효과</h4>
+          <div className={styles.description}>성능 점수 +{item.expectedScoreGain}점</div>
+        </article>
+        <article className={styles.inner_item}>
+          <h4>연관 지표</h4>
+          <div className={styles.indicator_container}>
+            {item.relatedMetrics?.map((metric) => (
+              <div className={styles.item}>{metric}</div>
+            ))}
+          </div>
+        </article>
+      </section>
+
+      <section className={styles.detail_container}>
+        <h4>상세 개선 방안</h4>
+        <div className={styles.inner_item}>{item.benefitDetail}</div>
+      </section>
+      <div className={styles.btn_detail}>자세히 보기 {'>'}</div>
+    </section>
+  ))
+}
+
 export default function SolutionPage() {
   // const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
 
-  const [testId, setTestId] = useState<string>('') // 테스트 ID
+  const [testId, setTestId] = useState<string>('ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8') // 테스트 ID
 
   // ! 변수 ===
   // 기존 점수
@@ -134,63 +170,8 @@ export default function SolutionPage() {
         {/* 단계별 개선 방안  */}
         <article className={styles.step_solution_container}>
           <h2 className={styles.title}>단계별 개선 방안</h2>
-          {solutionWebVitalData?.map((item) => (
-            <section className={styles.sub_container}>
-              <div className={`${styles.state} ${styles[item.status]}`}>{item.status}</div>
-              <h3 className={styles.sub_title}>{item.name}</h3>
-              <p className={styles.sub_summary}>{item.benefitSummary}</p>
-
-              <section className={styles.sub_effect_container}>
-                <article className={styles.inner_item}>
-                  <h4>예상 개선 효과</h4>
-                  <div className={styles.description}>성능 점수 +{item.expectedScoreGain}점</div>
-                </article>
-                <article className={styles.inner_item}>
-                  <h4>연관 지표</h4>
-                  <div className={styles.indicator_container}>
-                    {item.relatedMetrics?.map((metric) => (
-                      <div className={styles.item}>{metric}</div>
-                    ))}
-                  </div>
-                </article>
-              </section>
-
-              <section className={styles.detail_container}>
-                <h4>상세 개선 방안</h4>
-                <div className={styles.inner_item}>{item.benefitDetail}</div>
-              </section>
-              <div className={styles.btn_detail}>자세히 보기 {'>'}</div>
-            </section>
-          ))}
-
-          {solutionSecurityData?.map((item) => (
-            <section className={styles.sub_container}>
-              <div className={styles.state}>{item.status}</div>
-              <h3 className={styles.sub_title}>{item.name}</h3>
-              <p className={styles.sub_summary}>{item.benefitSummary}</p>
-
-              <section className={styles.sub_effect_container}>
-                <article className={styles.inner_item}>
-                  <h4>예상 개선 효과</h4>
-                  <div className={styles.description}>성능 점수 +{item.expectedScoreGain}점</div>
-                </article>
-                <article className={styles.inner_item}>
-                  <h4>연관 지표</h4>
-                  <div className={styles.indicator_container}>
-                    {item.relatedMetrics?.map((metric) => (
-                      <div className={styles.item}>{metric}</div>
-                    ))}
-                  </div>
-                </article>
-              </section>
-
-              <section className={styles.detail_container}>
-                <h4>상세 개선 방안</h4>
-                <div className={styles.inner_item}>{item.benefitDetail}</div>
-              </section>
-              <div className={styles.btn_detail}>자세히 보기 {'>'}</div>
-            </section>
-          ))}
+          <SolutionCards data={solutionWebVitalData} />
+          <SolutionCards data={solutionSecurityData} />
         </article>
 
         {/* 개선 기대효과 */}

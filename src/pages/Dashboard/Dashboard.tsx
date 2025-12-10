@@ -6,7 +6,6 @@ import img_sequrity from '@/assets/icons/sequrity.svg'
 
 import CustomBarChart from './CustomBarChart'
 import MetricSection from './Metric/MetricSection'
-import { performanceMetrics, securityMetrics } from './Metric/Metric.data'
 import { useEffect, useState } from 'react'
 import {
   fetchAiPriority,
@@ -23,8 +22,8 @@ export default function PerformanceDashboardMain() {
   const [testId, setTestId] = useState<string>('') // 테스트 ID
 
   const [priorityData, setPriorityData] = useState<AiPriority[] | null>(null) // 우선 개선이 필요한 항목 데이터
-  const [webVitalData, setWebVitalData] = useState<Vital[]>(performanceMetrics) // 우선 개선이 필요한 항목 데이터
-  const [securityVitalData, setSecurityVitalData] = useState<Vital[]>(securityMetrics) // 우선 개선이 필요한 항목 데이터
+  const [webVitalData, setWebVitalData] = useState<Vital[] | null>(null) // 우선 개선이 필요한 항목 데이터
+  const [securityVitalData, setSecurityVitalData] = useState<Vital[] | null>(null) // 우선 개선이 필요한 항목 데이터
 
   // 첫번째 차트 관련 블록
   const [urlAndDomainData, setUrlAndDomainData] = useState<DomainURL | null>(null) // 도메인, url
@@ -164,7 +163,7 @@ export default function PerformanceDashboardMain() {
                   // TODO : 추후에 데이터 넣어서 변경
                   <div className="border-box relative flex h-full w-full flex-col items-center justify-center rounded-[15px] p-2 shadow-md">
                     <div className="border-box absolute top-2 flex w-full flex-row items-center px-2">
-                      <div className="w-full text-[16px] text-[#83869A]">{item}</div>
+                      <div className="w-fㄴull text-[16px] text-[#83869A]">{item}</div>
                       <span className="inline-block h-[10px] w-[10px] rounded-full bg-[#FF3C3C]"></span>
                     </div>
                     <div className="text-[34px] font-semibold text-[#3B3D53]">45</div>

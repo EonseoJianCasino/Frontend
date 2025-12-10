@@ -8,5 +8,5 @@ import type { Vital } from '@/types/Dashboard.types'
 export interface MetricsSectionProps {
   title: string
   titleIcon: string
-  metricDatas: Vital[]
+  metricDatas: Vital[] | null
 }
