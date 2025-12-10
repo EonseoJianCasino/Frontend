@@ -19,7 +19,7 @@ import type { AiPriority, DomainURL, ScoreTotal, Vital } from '@/types/Dashboard
 
 export default function PerformanceDashboardMain() {
   // TODO : 추후 테스트ID 동적으로  변경
-  const testId: string = '7b0c17e3-8af6-4834-9507-0abdcdb62690'
+  const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
   // 변수 ====
   const [priorityData, setPriorityData] = useState<AiPriority[] | null>(null) // 우선 개선이 필요한 항목 데이터
   const [webVitalData, setWebVitalData] = useState<Vital[]>(performanceMetrics) // 우선 개선이 필요한 항목 데이터

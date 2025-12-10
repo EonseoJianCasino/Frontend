@@ -46,7 +46,7 @@ const SolutionSlider: React.FC<SolutionSliderProps> = ({ data }) => {
 }
 
 export default function SolutionPage() {
-  const testId: string = '7b0c17e3-8af6-4834-9507-0abdcdb62690'
+  const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
 
   // ! 변수 ===
   // 기존 점수
@@ -74,7 +74,6 @@ export default function SolutionPage() {
         setAfterScoreDetail(response.success.data.overallExpectedImprovement) // 개선 예상 점수 디테일
         setSolutionWebVitalData(response.success.data.webElements) // 웹바이탈 개선방안
         setSolutionSecurityData(response.success.data.securityMetrics) // 보안 개선방안
-        // TODO : 이 위에 5개 소프트하게 만들기
         setMajorImprovementData(response.success.data.majorImprovements) // 기대 효과
       } catch (error) {
         console.error(error)
@@ -95,13 +94,16 @@ export default function SolutionPage() {
       </header>
 
       {/* 상단 메인 카드 */}
+      {/* 
+      // TODO : 추후 기존점수, 개선예상점수 원 도넛이 점수에 따라 유동적으로 채워지게 바꿔야함 
+       */}
       <section className="box-border flex w-full flex-col items-center gap-y-6">
         <article className="relative box-border flex h-[213px] w-full max-w-[550px] flex-row items-center justify-around rounded-[15px] border-2 border-solid border-[#DEEBEF] bg-[#FFFFFF] p-4 shadow-md">
           <section className="relative flex flex-col items-center gap-y-3">
             <h3 className="absolute -top-7 text-[14px] text-[#4B4B4B]">기존 점수</h3>
             {/* 도넛 */}
             <div className="flex h-24 w-24 items-center justify-center rounded-full border-8 border-[#EDEBF0] border-t-[#FF3C3C]">
-              <div className="text-[30px] font-semibold text-[#000000]">65</div>
+              <div className="text-[30px] font-semibold text-[#000000]">{beforeScore}</div>
             </div>
           </section>
           <img src={ArrowRight} alt="->" />
@@ -110,10 +112,10 @@ export default function SolutionPage() {
             <h3 className="absolute -top-7 text-[14px] text-[#4B4B4B]">개선 예상 점수</h3>
             {/* 도넛 */}
             <div className="flex h-24 w-24 items-center justify-center rounded-full border-8 border-[#EDEBF0] border-t-[#3A7CA5]">
-              <div className="text-[30px] font-semibold text-[#000000]">88</div>
+              <div className="text-[30px] font-semibold text-[#000000]">{afterScore}</div>
             </div>
             <span className="absolute -bottom-8 text-[16px] font-semibold text-[#3A7CA5]">
-              24점 +
+              {afterScoreDetail}점 +
             </span>
           </section>
         </article>
@@ -121,37 +123,63 @@ export default function SolutionPage() {
         {/* 단계별 개선 방안  */}
         <article className={styles.step_solution_container}>
           <h2 className={styles.title}>단계별 개선 방안</h2>
+          {solutionWebVitalData?.map((item) => (
+            <section className={styles.sub_container}>
+              <div className={`${styles.state} ${styles[item.status]}`}>{item.status}</div>
+              <h3 className={styles.sub_title}>{item.name}</h3>
+              <p className={styles.sub_summary}>{item.benefitSummary}</p>
 
-          <section className={styles.sub_container}>
-            <div className={styles.state}>긴급</div>
-            <h3 className={styles.sub_title}>CLS(레이아웃 이동) 최적화</h3>
-            <p className={styles.sub_summary}>
-              이미지와 광고 영역의 크기를 미리 지정하여 레이아웃 이동을 방지합니다. 현재 0.25에서
-              0.08로 개선 가능합니다.
-            </p>
+              <section className={styles.sub_effect_container}>
+                <article className={styles.inner_item}>
+                  <h4>예상 개선 효과</h4>
+                  <div className={styles.description}>성능 점수 +{item.expectedScoreGain}점</div>
+                </article>
+                <article className={styles.inner_item}>
+                  <h4>연관 지표</h4>
+                  <div className={styles.indicator_container}>
+                    {item.relatedMetrics?.map((metric) => (
+                      <div className={styles.item}>{metric}</div>
+                    ))}
+                  </div>
+                </article>
+              </section>
 
-            <section className={styles.sub_effect_container}>
-              <article className={styles.inner_item}>
-                <h4>예상 개선 효과</h4>
-                <div className={styles.description}>성능 점수 +15점</div>
-              </article>
-              <article className={styles.inner_item}>
-                <h4>연관 지표</h4>
-                <div className={styles.indicator_container}>
-                  <div className={styles.item}>LCP</div>
-                  <div className={styles.item}>CLS</div>
-                </div>
-              </article>
+              <section className={styles.detail_container}>
+                <h4>상세 개선 방안</h4>
+                <div className={styles.inner_item}>{item.benefitDetail}</div>
+              </section>
+              <div className={styles.btn_detail}>자세히 보기 {'>'}</div>
             </section>
+          ))}
 
-            <section className={styles.detail_container}>
-              <h4>상세 개선 방안</h4>
-              <div className={styles.inner_item}>
-                설명설명.......설명설명.......설명설명.......설명설명.......설명설명.......설명설명.
-              </div>
+          {solutionSecurityData?.map((item) => (
+            <section className={styles.sub_container}>
+              <div className={styles.state}>{item.status}</div>
+              <h3 className={styles.sub_title}>{item.name}</h3>
+              <p className={styles.sub_summary}>{item.benefitSummary}</p>
+
+              <section className={styles.sub_effect_container}>
+                <article className={styles.inner_item}>
+                  <h4>예상 개선 효과</h4>
+                  <div className={styles.description}>성능 점수 +{item.expectedScoreGain}점</div>
+                </article>
+                <article className={styles.inner_item}>
+                  <h4>연관 지표</h4>
+                  <div className={styles.indicator_container}>
+                    {item.relatedMetrics?.map((metric) => (
+                      <div className={styles.item}>{metric}</div>
+                    ))}
+                  </div>
+                </article>
+              </section>
+
+              <section className={styles.detail_container}>
+                <h4>상세 개선 방안</h4>
+                <div className={styles.inner_item}>{item.benefitDetail}</div>
+              </section>
+              <div className={styles.btn_detail}>자세히 보기 {'>'}</div>
             </section>
-            <div className={styles.btn_detail}>자세히 보기 {'>'}</div>
-          </section>
+          ))}
         </article>
 
         {/* 개선 기대효과 */}

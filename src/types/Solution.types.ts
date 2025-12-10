@@ -3,7 +3,7 @@
 // * 개선 방안 - 성능, 보안 (2개 형태 동일 )
 export interface Solution {
   name: string // 제목
-  status: string
+  status: '주의' | '양호' | '긴급'
   benefitSummary: string // 간단 설명
   expectedScoreGain: number // 예산 개선 효과
   relatedMetrics: string[] // 연관 지표 리스트 (CLS...)
