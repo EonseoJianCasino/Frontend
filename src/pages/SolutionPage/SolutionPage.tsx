@@ -1,86 +1,12 @@
 import ArrowRight from '../../assets/icons/arrowRight.svg'
 import styles from './SolutionPage.module.scss'
-import Slider from 'react-slick'
-import 'slick-carousel/slick/slick.css'
-import 'slick-carousel/slick/slick-theme.css'
-import lightningImg from '../../assets/icons/lightning.svg'
+
 import { useEffect, useState } from 'react'
 import { fetchSolutions } from '@/apis/solutionApis'
 import type { MajorImprovement, Solution, SolutionResponse } from '@/types/Solution.types'
 import type { CurTest } from '@/types/Test.types'
-
-// Props 선언
-interface SolutionSliderProps {
-  data: MajorImprovement[] | null
-}
-
-// ! 개선방안 슬라이더
-const SolutionSlider: React.FC<SolutionSliderProps> = ({ data }) => {
-  const settings = {
-    dots: true,
-    infinite: true,
-    speed: 500,
-    slidesToShow: 3,
-    slidesToScroll: 3,
-  }
-
-  return (
-    <div className="slider-container mx-[1%] h-[230px] w-full">
-      <Slider {...settings}>
-        {data?.map((item) => (
-          <article
-            key={item.description}
-            className="box-border flex h-[225px] max-w-[95%] flex-1 flex-col rounded-[15px] bg-white p-10 shadow-md"
-          >
-            <div className="box-border flex h-[33px] w-[33px] items-center justify-center rounded-full bg-[#3B82F6]">
-              <img src={lightningImg} alt="번개" />
-            </div>
-            <div className="mt-2 pl-3 text-[21px] font-bold text-[#4B4B4B]">
-              <span className="text-[#3B82F6]">{item.metric}</span> {item.title}
-            </div>
-            <div className="mt-2 pl-3 text-[21px] font-bold text-[#707071]">{item.description}</div>
-          </article>
-        ))}
-      </Slider>
-    </div>
-  )
-}
-
-// ! 개선방안 카드
-interface SolutionProps {
-  data: Solution[] | null
-}
-
-export const SolutionCards: React.FC<SolutionProps> = ({ data }) => {
-  return data?.map((item) => (
-    <section className={styles.sub_container}>
-      <div className={`${styles.state} ${styles[item.status]}`}>{item.status}</div>
-      <h3 className={styles.sub_title}>{item.name}</h3>
-      <p className={styles.sub_summary}>{item.benefitSummary}</p>
-
-      <section className={styles.sub_effect_container}>
-        <article className={styles.inner_item}>
-          <h4>예상 개선 효과</h4>
-          <div className={styles.description}>성능 점수 +{item.expectedScoreGain}점</div>
-        </article>
-        <article className={styles.inner_item}>
-          <h4>연관 지표</h4>
-          <div className={styles.indicator_container}>
-            {item.relatedMetrics?.map((metric) => (
-              <div className={styles.item}>{metric}</div>
-            ))}
-          </div>
-        </article>
-      </section>
-
-      <section className={styles.detail_container}>
-        <h4>상세 개선 방안</h4>
-        <div className={styles.inner_item}>{item.benefitDetail}</div>
-      </section>
-      <div className={styles.btn_detail}>자세히 보기 {'>'}</div>
-    </section>
-  ))
-}
+import SolutionSlider from './SolutionSlider'
+import SolutionCards from './SolutionCards'
 
 export default function SolutionPage() {
   // const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
