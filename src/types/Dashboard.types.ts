@@ -65,13 +65,32 @@ export interface ScoreTotalResponse {
 }
 
 // =================================
+// * (세부점수 조회) 차트 데이터 score 받아오기
+
+export interface Score {
+  name: string // lcp
+  score: number // 100
+  urgentStatus?: 'GOOD' | 'WARNING' | 'POOR' | null | undefined
+}
+
+export interface ScoreResponse {
+  success: {
+    message: string
+    total: number // 총점
+    data: {
+      charData: Score[]
+    }
+    createdAt: string
+  }
+}
+// =================================
 
 // * 대시보드/우선 개선이 필요한 항목
 export interface AiPriority {
   rank: number
   targetType: string
   targetName: string
-  expectedGain: number
+  status: '긴급' | '주의' | '양호'
   reason: string
 }
 // * 총 3개가 나온다.

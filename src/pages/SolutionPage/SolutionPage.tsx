@@ -12,7 +12,7 @@ import SimplePieChart from '@/components/Charts/SimplePieChart'
 export default function SolutionPage() {
   // const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
 
-  const [testId, setTestId] = useState<string>('ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8') // 테스트 ID
+  const [testId, setTestId] = useState<string>('1ca4c78e-649d-47d9-85a4-6df51918bb7d') // 테스트 ID
 
   // ! 변수 ===
   // 기존 점수

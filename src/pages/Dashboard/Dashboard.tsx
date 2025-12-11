@@ -1,6 +1,6 @@
 import img_error from '@/assets/icons/error.svg'
-// import img_ok from '@/assets/icons/ok.svg'
-// import img_warning from '@/assets/icons/warning.svg'
+import img_ok from '@/assets/icons/ok.svg'
+import img_warning from '@/assets/icons/warning.svg'
 import img_fire from '@/assets/icons/fire.svg'
 import img_sequrity from '@/assets/icons/sequrity.svg'
 
@@ -9,18 +9,25 @@ import MetricSection from './Metric/MetricSection'
 import { useEffect, useState } from 'react'
 import {
   fetchAiPriority,
+  fetchScores,
   fetchScoreTotal,
   fetchSecurityVitals,
   fetchURLandDomain,
   fetchWebVitals,
 } from '@/apis/dashboardApis'
-import type { AiPriority, DomainURL, ScoreTotal, Vital } from '@/types/Dashboard.types'
+import {
+  type Score,
+  type AiPriority,
+  type DomainURL,
+  type ScoreTotal,
+  type Vital,
+} from '@/types/Dashboard.types'
 import type { CurTest } from '@/types/Test.types'
 import SimplePieChart from '@/components/Charts/SimplePieChart'
 
 export default function PerformanceDashboardMain() {
   // ! 변수 ====
-  const [testId, setTestId] = useState<string>('') // 테스트 ID
+  const [testId, setTestId] = useState<string>('1ca4c78e-649d-47d9-85a4-6df51918bb7d') // 테스트 ID
 
   const [priorityData, setPriorityData] = useState<AiPriority[] | null>(null) // 우선 개선이 필요한 항목 데이터
   const [webVitalData, setWebVitalData] = useState<Vital[] | null>(null) // 우선 개선이 필요한 항목 데이터
@@ -29,7 +36,7 @@ export default function PerformanceDashboardMain() {
   // 첫번째 차트 관련 블록
   const [urlAndDomainData, setUrlAndDomainData] = useState<DomainURL | null>(null) // 도메인, url
   const [scoreTotalData, setScoreTotalData] = useState<ScoreTotal | null>(null) // 도메인, url
-
+  const [scoreData, setScoreData] = useState<Score[] | null>(null) // 차트데이터
   // ======
 
   //* 첫 렌더링시 테스트 ID 받아오기
@@ -96,11 +103,23 @@ export default function PerformanceDashboardMain() {
       }
     }
 
+    //* 대시보드 total 점수 받아오기
+    const getScores = async () => {
+      try {
+        const response = await fetchScores(testId) // 대시보드/우선개선이 필요한 항목
+        setScoreData(response?.success?.data?.charData)
+        console.log('setScoresData', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
     getAiPriority()
     getWebVitals()
     getSecurityVitals()
     getURLandDomain()
     getScoreTotal()
+    getScores()
   }, [testId])
 
   return (
@@ -109,7 +128,7 @@ export default function PerformanceDashboardMain() {
       <article className="// TODO : max-w 추후 삭제 (비율 맞추기 ) relative box-border flex h-[394px] w-full max-w-[953px] flex-col rounded-[15px] border-2 border-solid border-[#DEEBEF] bg-[#FFFFFF] p-4 shadow-md">
         <header>
           {/* 아이템  */}
-          <div className="absolute -top-7 left-4 flex flex-row justify-start gap-x-4 text-[14px] text-sm font-semibold text-[#5C5C5C] text-gray-500">
+          <div className="absolute -top-7 left-4 flex flex-row justify-start gap-x-4 text-[14px] text-sm font-semibold text-[#5C5C5C]">
             <div className="flex flex-row items-center justify-start">
               <span className="mr-1 inline-block h-[7px] w-[7px] rounded-full bg-[#357BFA]"></span>
               <span>GOOD</span>
@@ -143,7 +162,13 @@ export default function PerformanceDashboardMain() {
         <section className="flex h-full w-full flex-row justify-start gap-x-4">
           {/* 차트 섹션 */}
           <section className="max-h-[284px] max-w-[452px] flex-1">
-            <CustomBarChart title="" yLabel="" />
+            <CustomBarChart
+              title=""
+              yLabel=""
+              data={scoreData ?? undefined}
+              dataKey="score"
+              name="name"
+            />
           </section>
           {/* 카드섹션  */}
           <section className="flex flex-1 flex-col items-center gap-y-2">
@@ -167,17 +192,28 @@ export default function PerformanceDashboardMain() {
               </div>
             </section>
             {/* 그리드 컴포넌트 2*3 */}
-            <section className="grid h-full w-full grid-cols-3 grid-rows-2 gap-3 gap-4">
+            <section className="grid h-full w-full grid-cols-3 grid-rows-2 gap-4">
               {/* 카드 6개 */}
-              {['LCP', 'CLS', 'INP', 'FCP', 'TTFB', 'sequrity'].map((item) => {
+              {scoreData?.map((item) => {
                 return (
                   // TODO : 추후에 데이터 넣어서 변경
                   <div className="border-box relative flex h-full w-full flex-col items-center justify-center rounded-[15px] p-2 shadow-md">
                     <div className="border-box absolute top-2 flex w-full flex-row items-center px-2">
-                      <div className="w-fㄴull text-[16px] text-[#83869A]">{item}</div>
-                      <span className="inline-block h-[10px] w-[10px] rounded-full bg-[#FF3C3C]"></span>
+                      <div className="w-full text-[16px] text-[#83869A]">{item.name}</div>
+                      {/* border-[#FABF35]  border-[#357BFA] */}
+                      {item.urgentStatus && ( // 값에 따라 색상 다르게 하기
+                        <span
+                          className={`inline-block h-[10px] w-[10px] rounded-full ${
+                            item.urgentStatus === 'GOOD'
+                              ? 'bg-[#357BFA]'
+                              : item.urgentStatus === 'WARNING'
+                                ? 'bg-[#FABF35]'
+                                : 'bg-[#FF3C3C]'
+                          } `}
+                        ></span>
+                      )}
                     </div>
-                    <div className="text-[34px] font-semibold text-[#3B3D53]">45</div>
+                    <div className="text-[34px] font-semibold text-[#3B3D53]">{item.score}</div>
                   </div>
                 )
               })}
@@ -188,9 +224,7 @@ export default function PerformanceDashboardMain() {
 
       {/* 우선 개선이 필요한 항목 */}
       <article className="// TODO : max-width 추후 삭제, 크기 맞춰야 relative box-border flex w-full max-w-[953px] flex-col gap-y-5 rounded-[15px] border-2 border-solid border-[#DEEBEF] bg-[#FFFFFF] p-4 shadow-md">
-        <h2 className="text-[12px] text-[20px] font-semibold text-[#4B4B4B]">
-          🚨 우선 개선이 필요한 항목
-        </h2>
+        <h2 className="text-[20px] font-semibold text-[#4B4B4B]">🚨 우선 개선이 필요한 항목</h2>
         {/* 
           // TODO : img, 상태에 따라 색상에 바뀌게 만들 것이다. (추후 수정된 데이터 받으면)
         */}
@@ -198,8 +232,20 @@ export default function PerformanceDashboardMain() {
         {// border-[#FABF35]  border-[#357BFA]
         priorityData?.map((item) => (
           <ul className="flex flex-col gap-y-4">
-            <li className="box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 border-[#FF3C3C] bg-[#F8F9FA] px-4">
-              <img src={img_error} />
+            <li
+              className={`box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 ${
+                item.status === '양호'
+                  ? 'border-[#357BFA]'
+                  : item.status === '주의'
+                    ? 'border-[#FABF35]'
+                    : 'border-[#FF3C3C]' // 긴급
+              } bg-[#F8F9FA] px-4`}
+            >
+              <img
+                src={
+                  item.status === '양호' ? img_ok : item.status === '주의' ? img_warning : img_error
+                }
+              />
               <div className="box-border flex h-full w-full flex-col justify-center">
                 <div className="text-[16px] font-semibold text-[#4B4B4B]">{item.targetName}</div>
                 <div className="text-[12px] font-semibold text-[#888888]">{item.reason}</div>
