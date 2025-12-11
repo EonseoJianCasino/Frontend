@@ -1,6 +1,7 @@
 import type {
   AiPriorityResponse,
   DomainURLResponse,
+  ScoreResponse,
   ScoreTotalResponse,
   SecurityVitalsResponse,
   WebVitalItemResponse,
@@ -56,6 +57,18 @@ export const fetchScoreTotal = async (testId: string): Promise<ScoreTotalRespons
     return response.data
   } catch (error) {
     console.error('Failed to fetch cell sum data', error)
+    throw error
+  }
+}
+
+// * 대시보드 6개 점수, 차트 점수
+export const fetchScores = async (testId: string): Promise<ScoreResponse> => {
+  try {
+    const url = `/api/tests/${testId}/scores`
+    const response = await defaultAxios.get(url)
+    return response.data
+  } catch (error) {
+    console.error('Failed to fetch scores data', error)
     throw error
   }
 }
