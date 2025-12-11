@@ -6,7 +6,6 @@ import img_sequrity from '@/assets/icons/sequrity.svg'
 
 import CustomBarChart from './CustomBarChart'
 import MetricSection from './Metric/MetricSection'
-import { performanceMetrics, securityMetrics } from './Metric/Metric.data'
 import { useEffect, useState } from 'react'
 import {
   fetchAiPriority,
@@ -16,14 +15,16 @@ import {
   fetchWebVitals,
 } from '@/apis/dashboardApis'
 import type { AiPriority, DomainURL, ScoreTotal, Vital } from '@/types/Dashboard.types'
+import type { CurTest } from '@/types/Test.types'
+import SimplePieChart from '@/components/Charts/SimplePieChart'
 
 export default function PerformanceDashboardMain() {
-  // TODO : 추후 테스트ID 동적으로  변경
-  const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
-  // 변수 ====
+  // ! 변수 ====
+  const [testId, setTestId] = useState<string>('') // 테스트 ID
+
   const [priorityData, setPriorityData] = useState<AiPriority[] | null>(null) // 우선 개선이 필요한 항목 데이터
-  const [webVitalData, setWebVitalData] = useState<Vital[]>(performanceMetrics) // 우선 개선이 필요한 항목 데이터
-  const [securityVitalData, setSecurityVitalData] = useState<Vital[]>(securityMetrics) // 우선 개선이 필요한 항목 데이터
+  const [webVitalData, setWebVitalData] = useState<Vital[] | null>(null) // 우선 개선이 필요한 항목 데이터
+  const [securityVitalData, setSecurityVitalData] = useState<Vital[] | null>(null) // 우선 개선이 필요한 항목 데이터
 
   // 첫번째 차트 관련 블록
   const [urlAndDomainData, setUrlAndDomainData] = useState<DomainURL | null>(null) // 도메인, url
@@ -31,7 +32,15 @@ export default function PerformanceDashboardMain() {
 
   // ======
 
-  // * 첫 렌더링 시 우선 개선사항 받아오기
+  //* 첫 렌더링시 테스트 ID 받아오기
+  useEffect(() => {
+    if (typeof chrome === 'undefined' || !chrome.storage?.local) return
+    chrome.storage.local.get<{ curTest?: CurTest }>('curTest', ({ curTest }) => {
+      if (curTest?.testId) setTestId(curTest.testId)
+    })
+  }, [])
+
+  // * testID 받아오면 우선 개선사항 받아오기
   useEffect(() => {
     // * 우선 개선사항 받아오기
     const getAiPriority = async () => {
@@ -86,13 +95,13 @@ export default function PerformanceDashboardMain() {
         console.error(error)
       }
     }
-    //
+
     getAiPriority()
     getWebVitals()
     getSecurityVitals()
     getURLandDomain()
     getScoreTotal()
-  }, [])
+  }, [testId])
 
   return (
     <main className="flex w-full max-w-[1700px] flex-col items-center justify-center gap-y-6 bg-[#F5F9FA] px-6 py-6 lg:px-8">
@@ -139,7 +148,17 @@ export default function PerformanceDashboardMain() {
           {/* 카드섹션  */}
           <section className="flex flex-1 flex-col items-center gap-y-2">
             <section className="box-border flex min-h-[92px] w-[261px] flex-row items-center justify-around gap-x-4 rounded-[15px] bg-[#FFFFFF] shadow-md">
-              <div className="h-16 w-16 rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5]"></div>
+              {/* <div className="h-16 w-16 rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5]"></div> */}
+              <div className="h-16 w-16">
+                <SimplePieChart
+                  value={scoreTotalData?.totalScore}
+                  colors={['#3A7CA5', '#EDEBF0']}
+                  innerRadius={20}
+                  outerRadius={30}
+                  isValue={false}
+                />
+              </div>
+
               <div className="flex flex-col justify-start gap-x-4">
                 <div className="text-[34px] font-semibold text-[#3B3D53]">
                   {scoreTotalData?.totalScore || '-'}점
@@ -155,7 +174,7 @@ export default function PerformanceDashboardMain() {
                   // TODO : 추후에 데이터 넣어서 변경
                   <div className="border-box relative flex h-full w-full flex-col items-center justify-center rounded-[15px] p-2 shadow-md">
                     <div className="border-box absolute top-2 flex w-full flex-row items-center px-2">
-                      <div className="w-full text-[16px] text-[#83869A]">{item}</div>
+                      <div className="w-fㄴull text-[16px] text-[#83869A]">{item}</div>
                       <span className="inline-block h-[10px] w-[10px] rounded-full bg-[#FF3C3C]"></span>
                     </div>
                     <div className="text-[34px] font-semibold text-[#3B3D53]">45</div>

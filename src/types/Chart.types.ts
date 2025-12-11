@@ -45,3 +45,12 @@ export interface ChartsProps extends ChartProps {
 export interface MChartsProps extends MChartProps {
   chartType: 'mLine' | 'mLineArea'
 }
+
+// * 파이차트
+export interface PieChartProps {
+  isValue?: boolean // true / false로 text넣을건지
+  value?: number // 목표값
+  colors?: string[] // 색상 2개 (['#e74c3c', '#f3f6f9'])
+  innerRadius?: number // 내부
+  outerRadius?: number // 외부
+}
