@@ -68,7 +68,7 @@ export const fetchScores = async (testId: string): Promise<ScoreResponse> => {
     const response = await defaultAxios.get(url)
     return response.data
   } catch (error) {
-    console.error('Failed to fetch cell sum data', error)
+    console.error('Failed to fetch scores data', error)
     throw error
   }
 }

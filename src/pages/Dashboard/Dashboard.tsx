@@ -27,7 +27,7 @@ import SimplePieChart from '@/components/Charts/SimplePieChart'
 
 export default function PerformanceDashboardMain() {
   // ! 변수 ====
-  const [testId, setTestId] = useState<string>('1ca4c78e-649d-47d9-85a4-6df51918bb7d') // 테스트 ID
+  const [testId, setTestId] = useState<string>('') // 테스트 ID
 
   const [priorityData, setPriorityData] = useState<AiPriority[] | null>(null) // 우선 개선이 필요한 항목 데이터
   const [webVitalData, setWebVitalData] = useState<Vital[] | null>(null) // 우선 개선이 필요한 항목 데이터
@@ -114,12 +114,15 @@ export default function PerformanceDashboardMain() {
       }
     }
 
-    getAiPriority()
-    getWebVitals()
-    getSecurityVitals()
-    getURLandDomain()
-    getScoreTotal()
-    getScores()
+    // 병렬로 API 호출 처리
+    Promise.all([
+      getAiPriority(),
+      getWebVitals(),
+      getSecurityVitals(),
+      getURLandDomain(),
+      getScoreTotal(),
+      getScores(),
+    ])
   }, [testId])
 
   return (
@@ -204,11 +207,11 @@ export default function PerformanceDashboardMain() {
                       {item.urgentStatus && ( // 값에 따라 색상 다르게 하기
                         <span
                           className={`inline-block h-[10px] w-[10px] rounded-full ${
-                            item.urgentStatus === 'GOOD'
-                              ? 'bg-[#357BFA]'
-                              : item.urgentStatus === 'WARNING'
-                                ? 'bg-[#FABF35]'
-                                : 'bg-[#FF3C3C]'
+                            {
+                              GOOD: 'bg-[#357BFA]',
+                              WARNING: 'bg-[#FABF35]',
+                              POOR: 'bg-[#FF3C3C]',
+                            }[item.urgentStatus]
                           } `}
                         ></span>
                       )}
@@ -234,16 +237,20 @@ export default function PerformanceDashboardMain() {
           <ul className="flex flex-col gap-y-4">
             <li
               className={`box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 ${
-                item.status === '양호'
-                  ? 'border-[#357BFA]'
-                  : item.status === '주의'
-                    ? 'border-[#FABF35]'
-                    : 'border-[#FF3C3C]' // 긴급
+                {
+                  양호: 'border-[#357BFA]',
+                  주의: 'border-[#FABF35]',
+                  긴급: 'border-[#FF3C3C]',
+                }[item.status]
               } bg-[#F8F9FA] px-4`}
             >
               <img
                 src={
-                  item.status === '양호' ? img_ok : item.status === '주의' ? img_warning : img_error
+                  {
+                    양호: img_ok,
+                    주의: img_warning,
+                    긴급: img_error,
+                  }[item.status]
                 }
               />
               <div className="box-border flex h-full w-full flex-col justify-center">
