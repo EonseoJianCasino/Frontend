@@ -3,11 +3,26 @@
 @layer components {
   // *단계별 개선 방안
   .step_solution_container {
-    @apply relative box-border flex w-full max-w-[974px] flex-col items-center justify-around rounded-[15px] border-2 border-solid border-[#DEEBEF] bg-[#FFFFFF] p-4 shadow-md;
+    @apply relative box-border flex w-full max-w-[974px] flex-col items-center justify-around gap-y-6 rounded-[15px] border-2 border-solid border-[#DEEBEF] bg-[#FFFFFF] p-4 shadow-md;
 
     // * 상테 긴급
     .state {
       @apply flex h-[22px] w-[44px] items-center justify-center rounded-full bg-[#FDE3E3] text-[12px] font-semibold text-[#FF3C3C];
+    }
+
+    // 상태 주의
+    .주의 {
+      @apply bg-[#FFEDC2] text-[#FABF35];
+    }
+
+    // 상태 양호
+    .양호 {
+      @apply bg-[#D4E3FF] text-[#357BFA];
+    }
+
+    // 상태 긴급
+    .긴급 {
+      @apply bg-[#FDE3E3] text-[#FF3C3C];
     }
 
     // 단계별 개선 방안 이름
@@ -47,7 +62,7 @@
             @apply box-border flex w-full gap-x-2;
 
             .item {
-              @apply flex h-[27px] w-[72px] items-center justify-center rounded-[5px] bg-[#E8F4F7] text-[14px] font-semibold text-[#007BA7];
+              @apply flex h-[27px] min-w-[72px] items-center justify-center rounded-[5px] bg-[#E8F4F7] px-4 text-[14px] font-semibold text-[#007BA7];
             }
           }
         }
@@ -68,6 +83,14 @@
           @apply text-[12px] font-semibold text-[#747474];
         }
       }
+    }
+  }
+
+  // 개선 기대효과
+  .solution_container {
+    @apply flex w-[974px] flex-col gap-y-2;
+    .title {
+      @apply mr-auto box-border text-[20px] font-semibold text-[#4B4B4B];
     }
   }
 }

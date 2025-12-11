@@ -1,7 +1,7 @@
-import type { MetricItem } from './Metric.types'
+import type { Vital } from '@/types/Dashboard.types'
 
 // 예시 더미 데이터 (성능 지표)
-export const performanceMetrics: MetricItem[] = [
+export const performanceMetrics: Vital[] = [
   {
     metric: 'LCP (Largest Contentful Paint)',
     message: '가장 큰 콘텐츠 로딩 시간',
@@ -35,7 +35,7 @@ export const performanceMetrics: MetricItem[] = [
 ]
 
 // 예시 더미 데이터 (보안 지표)
-export const securityMetrics: MetricItem[] = [
+export const securityMetrics: Vital[] = [
   {
     metric: 'SSL',
     message: 'SSL 유효 (61일 남음)',

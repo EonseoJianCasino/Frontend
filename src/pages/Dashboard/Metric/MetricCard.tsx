@@ -1,13 +1,13 @@
 import img_error from '@/assets/icons/error.svg'
 import img_ok from '@/assets/icons/ok.svg'
 import img_warning from '@/assets/icons/warning.svg'
-import type { MetricItem } from './Metric.types'
+import type { Vital } from '@/types/Dashboard.types'
 
 /**
  * 성능 지표, 보안 지표 카드
  * @returns
  */
-export default function MetricCard({ metric, message, value, urgentStatus }: MetricItem) {
+export default function MetricCard({ metric, message, value, urgentStatus }: Vital) {
   console.log(metric, urgentStatus)
   return (
     <article className="box-border flex w-full min-w-[400px] flex-row items-center justify-between rounded-[10px] border-[1px] border-solid border-[#EBEEEE] bg-[#F8F9FA] p-3 px-6">

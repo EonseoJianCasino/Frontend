@@ -1,14 +1,108 @@
 import img_error from '@/assets/icons/error.svg'
-import img_ok from '@/assets/icons/ok.svg'
-import img_warning from '@/assets/icons/warning.svg'
+// import img_ok from '@/assets/icons/ok.svg'
+// import img_warning from '@/assets/icons/warning.svg'
 import img_fire from '@/assets/icons/fire.svg'
 import img_sequrity from '@/assets/icons/sequrity.svg'
 
 import CustomBarChart from './CustomBarChart'
 import MetricSection from './Metric/MetricSection'
-import { performanceMetrics, securityMetrics } from './Metric/Metric.data'
+import { useEffect, useState } from 'react'
+import {
+  fetchAiPriority,
+  fetchScoreTotal,
+  fetchSecurityVitals,
+  fetchURLandDomain,
+  fetchWebVitals,
+} from '@/apis/dashboardApis'
+import type { AiPriority, DomainURL, ScoreTotal, Vital } from '@/types/Dashboard.types'
+import type { CurTest } from '@/types/Test.types'
+import SimplePieChart from '@/components/Charts/SimplePieChart'
 
 export default function PerformanceDashboardMain() {
+  // ! 변수 ====
+  const [testId, setTestId] = useState<string>('') // 테스트 ID
+
+  const [priorityData, setPriorityData] = useState<AiPriority[] | null>(null) // 우선 개선이 필요한 항목 데이터
+  const [webVitalData, setWebVitalData] = useState<Vital[] | null>(null) // 우선 개선이 필요한 항목 데이터
+  const [securityVitalData, setSecurityVitalData] = useState<Vital[] | null>(null) // 우선 개선이 필요한 항목 데이터
+
+  // 첫번째 차트 관련 블록
+  const [urlAndDomainData, setUrlAndDomainData] = useState<DomainURL | null>(null) // 도메인, url
+  const [scoreTotalData, setScoreTotalData] = useState<ScoreTotal | null>(null) // 도메인, url
+
+  // ======
+
+  //* 첫 렌더링시 테스트 ID 받아오기
+  useEffect(() => {
+    if (typeof chrome === 'undefined' || !chrome.storage?.local) return
+    chrome.storage.local.get<{ curTest?: CurTest }>('curTest', ({ curTest }) => {
+      if (curTest?.testId) setTestId(curTest.testId)
+    })
+  }, [])
+
+  // * testID 받아오면 우선 개선사항 받아오기
+  useEffect(() => {
+    // * 우선 개선사항 받아오기
+    const getAiPriority = async () => {
+      try {
+        const response = await fetchAiPriority(testId) // 대시보드/우선개선이 필요한 항목
+        setPriorityData(response.success.data.topPriorities) // 우선 개선 항목만 나타남
+        console.log('우선개선사항', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+    // * 성능지표, 보안지표 받아오기
+    const getWebVitals = async () => {
+      try {
+        const response = await fetchWebVitals(testId) // 대시보드/우선개선이 필요한 항목
+        setWebVitalData(response.success.data.items) // 우선 개선 항목만 나타남
+        console.log('성능지표', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    const getSecurityVitals = async () => {
+      try {
+        const response = await fetchSecurityVitals(testId) // 대시보드/우선개선이 필요한 항목
+        setSecurityVitalData(response.success.data.items) // 우선 개선 항목만 나타남
+        console.log('보안지표', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    // * 최상단
+    // *대시보드 / URL 도메인 네임
+    const getURLandDomain = async () => {
+      try {
+        const response = await fetchURLandDomain(testId) // 대시보드/우선개선이 필요한 항목
+        setUrlAndDomainData(response?.success.data) // 우선 개선 항목만 나타남
+        console.log('대시보드 URL, 도메인 데이터', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    //* 대시보드 total 점수 받아오기
+    const getScoreTotal = async () => {
+      try {
+        const response = await fetchScoreTotal(testId) // 대시보드/우선개선이 필요한 항목
+        setScoreTotalData(response?.success?.data)
+        console.log('총점 score total 데이터', response)
+      } catch (error) {
+        console.error(error)
+      }
+    }
+
+    getAiPriority()
+    getWebVitals()
+    getSecurityVitals()
+    getURLandDomain()
+    getScoreTotal()
+  }, [testId])
+
   return (
     <main className="flex w-full max-w-[1700px] flex-col items-center justify-center gap-y-6 bg-[#F5F9FA] px-6 py-6 lg:px-8">
       {/* 상단 메인 카드 */}
@@ -34,9 +128,14 @@ export default function PerformanceDashboardMain() {
           <span className="absolute right-4 top-5 text-sm text-gray-500">
             <strong className="font-semibold text-[#3A7CA5]">10s </strong>측정 결과
           </span>
-          <h1 className="text-[30px] font-semibold">youtube.com</h1>
-          <a className="text-[12px] text-[#888888]" href="https://www.youtube.com">
-            https://www.youtube.com
+          <h1 className="text-[30px] font-semibold">
+            {urlAndDomainData?.domainName || 'youtube.com'}
+          </h1>
+          <a
+            className="text-[12px] text-[#888888]"
+            href={urlAndDomainData?.url || 'https://www.youtube.com'}
+          >
+            {urlAndDomainData?.url}
           </a>
         </header>
 
@@ -49,9 +148,21 @@ export default function PerformanceDashboardMain() {
           {/* 카드섹션  */}
           <section className="flex flex-1 flex-col items-center gap-y-2">
             <section className="box-border flex min-h-[92px] w-[261px] flex-row items-center justify-around gap-x-4 rounded-[15px] bg-[#FFFFFF] shadow-md">
-              <div className="h-16 w-16 rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5]"></div>
+              {/* <div className="h-16 w-16 rounded-full border-8 border-[#E3F2FD] border-t-[#3A7CA5]"></div> */}
+              <div className="h-16 w-16">
+                <SimplePieChart
+                  value={scoreTotalData?.totalScore}
+                  colors={['#3A7CA5', '#EDEBF0']}
+                  innerRadius={20}
+                  outerRadius={30}
+                  isValue={false}
+                />
+              </div>
+
               <div className="flex flex-col justify-start gap-x-4">
-                <div className="text-[34px] font-semibold text-[#3B3D53]">65점</div>
+                <div className="text-[34px] font-semibold text-[#3B3D53]">
+                  {scoreTotalData?.totalScore || '-'}점
+                </div>
                 <div className="text-[14px] text-[#4B4B4B]">Total Score</div>
               </div>
             </section>
@@ -63,7 +174,7 @@ export default function PerformanceDashboardMain() {
                   // TODO : 추후에 데이터 넣어서 변경
                   <div className="border-box relative flex h-full w-full flex-col items-center justify-center rounded-[15px] p-2 shadow-md">
                     <div className="border-box absolute top-2 flex w-full flex-row items-center px-2">
-                      <div className="w-full text-[16px] text-[#83869A]">{item}</div>
+                      <div className="w-fㄴull text-[16px] text-[#83869A]">{item}</div>
                       <span className="inline-block h-[10px] w-[10px] rounded-full bg-[#FF3C3C]"></span>
                     </div>
                     <div className="text-[34px] font-semibold text-[#3B3D53]">45</div>
@@ -81,49 +192,27 @@ export default function PerformanceDashboardMain() {
           🚨 우선 개선이 필요한 항목
         </h2>
         {/* 
-          // TODO : 상태에 따라 색상에 바뀌게 만들 것이다. (soft하게 만들기)
+          // TODO : img, 상태에 따라 색상에 바뀌게 만들 것이다. (추후 수정된 데이터 받으면)
         */}
-        <ul className="flex flex-col gap-y-4">
-          <li className="box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 border-[#FF3C3C] bg-[#F8F9FA] px-4">
-            <img src={img_error} />
-            <div className="box-border flex h-full w-full flex-col justify-center">
-              <div className="text-[16px] font-semibold text-[#4B4B4B]">CSL 점수 개선이 필요</div>
-              <div className="text-[12px] font-semibold text-[#888888]">
-                레이아웃 이동으로 인한 사용자 경험 저하
-              </div>
-            </div>
-          </li>
-        </ul>
 
-        <ul className="flex flex-col gap-y-4">
-          <li className="box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 border-[#FABF35] bg-[#F8F9FA] px-4">
-            <img src={img_warning} />
-            <div className="box-border flex h-full w-full flex-col justify-center">
-              <div className="text-[16px] font-semibold text-[#4B4B4B]">보안 헤더 누락</div>
-              <div className="text-[12px] font-semibold text-[#888888]">
-                CSP, HTTPS 헤더가 설정되지 않음
+        {// border-[#FABF35]  border-[#357BFA]
+        priorityData?.map((item) => (
+          <ul className="flex flex-col gap-y-4">
+            <li className="box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 border-[#FF3C3C] bg-[#F8F9FA] px-4">
+              <img src={img_error} />
+              <div className="box-border flex h-full w-full flex-col justify-center">
+                <div className="text-[16px] font-semibold text-[#4B4B4B]">{item.targetName}</div>
+                <div className="text-[12px] font-semibold text-[#888888]">{item.reason}</div>
               </div>
-            </div>
-          </li>
-        </ul>
-
-        <ul className="flex flex-col gap-y-4">
-          <li className="box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 border-[#357BFA] bg-[#F8F9FA] px-4">
-            <img src={img_ok} />
-            <div className="box-border flex h-full w-full flex-col justify-center">
-              <div className="text-[16px] font-semibold text-[#4B4B4B]">SSL 인증서 만료 임박</div>
-              <div className="text-[12px] font-semibold text-[#888888]">
-                29일 후 만료 예정 - 갱신 준비 필요
-              </div>
-            </div>
-          </li>
-        </ul>
+            </li>
+          </ul>
+        ))}
       </article>
 
       {/* 성능 지표 & 보안 지표 */}
       <article className="box-border flex w-[956px] flex-row justify-between gap-x-4">
-        <MetricSection title="성능 지표" titleIcon={img_fire} metricDatas={performanceMetrics} />
-        <MetricSection title="보안 지표" titleIcon={img_sequrity} metricDatas={securityMetrics} />
+        <MetricSection title="성능 지표" titleIcon={img_fire} metricDatas={webVitalData} />
+        <MetricSection title="보안 지표" titleIcon={img_sequrity} metricDatas={securityVitalData} />
       </article>
     </main>
   )
