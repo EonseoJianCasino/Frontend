@@ -26,6 +26,9 @@ import {
 import type { CurTest } from '@/types/Test.types'
 import SimplePieChart from '@/components/Charts/SimplePieChart'
 
+// "자세히 보기"에서 들어올 때 상단 여백을 가릴 정도로만 내려주는 오프셋
+const SCROLL_OFFSET = 120
+
 export default function PerformanceDashboardMain() {
   // ! 변수 ====
   const [testId, setTestId] = useState<string>('') // 테스트 ID
@@ -136,7 +139,7 @@ export default function PerformanceDashboardMain() {
 
     // 약간 아래로 스크롤 (헤더/여백 가리기용)
     window.requestAnimationFrame(() => {
-      window.scrollTo({ top: 120, behavior: 'smooth' })
+      window.scrollTo({ top: SCROLL_OFFSET, behavior: 'smooth' })
     })
 
     // 파라미터 제거하여 새로고침 시 반복되지 않게 함
