@@ -133,7 +133,8 @@ export default function Popup() {
 
   const openDetail = () => {
     const baseUrl = chrome.runtime.getURL('index.html')
-    const targetUrl = `${baseUrl}#/app/dashboard`
+    // 대시보드 진입 시 약간 아래로 스크롤하기 위한 힌트 파라미터
+    const targetUrl = `${baseUrl}#/app/dashboard?scroll=detail`
 
     chrome.tabs.query({}, (tabs) => {
       const existing = tabs.find((tab) => tab.url?.startsWith(`${baseUrl}#/app`))

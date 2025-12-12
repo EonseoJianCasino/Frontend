@@ -7,6 +7,7 @@ import img_sequrity from '@/assets/icons/sequrity.svg'
 import CustomBarChart from './CustomBarChart'
 import MetricSection from './Metric/MetricSection'
 import { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
 import {
   fetchAiPriority,
   fetchScores,
@@ -38,6 +39,8 @@ export default function PerformanceDashboardMain() {
   const [scoreTotalData, setScoreTotalData] = useState<ScoreTotal | null>(null) // 도메인, url
   const [scoreData, setScoreData] = useState<Score[] | null>(null) // 차트데이터
   // ======
+  const location = useLocation()
+  const navigate = useNavigate()
 
   //* 첫 렌더링시 테스트 ID 받아오기
   useEffect(() => {
@@ -124,6 +127,28 @@ export default function PerformanceDashboardMain() {
       getScores(),
     ])
   }, [testId])
+
+  // 팝업 "자세히 보기"에서 넘어올 때 약간 아래 위치에서 시작하도록 처리
+  useEffect(() => {
+    const params = new URLSearchParams(location.search)
+    const shouldScroll = params.get('scroll') === 'detail'
+    if (!shouldScroll) return
+
+    // 약간 아래로 스크롤 (헤더/여백 가리기용)
+    window.requestAnimationFrame(() => {
+      window.scrollTo({ top: 120, behavior: 'smooth' })
+    })
+
+    // 파라미터 제거하여 새로고침 시 반복되지 않게 함
+    params.delete('scroll')
+    navigate(
+      {
+        pathname: location.pathname,
+        search: params.toString() ? `?${params.toString()}` : '',
+      },
+      { replace: true },
+    )
+  }, [location.pathname, location.search, navigate])
 
   return (
     <main className="flex w-full max-w-[1700px] flex-col items-center justify-center gap-y-6 bg-[#F5F9FA] px-6 py-6 lg:px-8">
