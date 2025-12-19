@@ -36,7 +36,7 @@ const SimplePieChart: React.FC<PieChartProps> = ({
             stroke="none" // 테두리 없애기
             cornerRadius="50%" // 코너 둥글게
           >
-            {data.map((entry, index) => (
+            {data.map((_, index) => (
               <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
             ))}
           </Pie>
