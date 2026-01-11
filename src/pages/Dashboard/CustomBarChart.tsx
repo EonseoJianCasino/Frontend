@@ -107,7 +107,13 @@ const CustomBarChart: React.FC<ChartProps> = ({
     <div className={styles.screen}>
       <ResponsiveContainer className={styles.responsive_container}>
         {/* 바차트 컨테이너 */}
-        <BarChart className={styles.chart_container} width={500} height={300} data={data}>
+        <BarChart
+          className={styles.chart_container}
+          width={500}
+          height={300}
+          data={data}
+          margin={{ top: 18, right: 0, left: 0, bottom: 0 }}
+        >
           {/* 네모네모 */}
           <CartesianGrid strokeDasharray="3 3" stroke="#cccccc" />
           {/* x축  기준*/}

@@ -25,6 +25,7 @@ import {
 } from '@/types/Dashboard.types'
 import type { CurTest } from '@/types/Test.types'
 import SimplePieChart from '@/components/Charts/SimplePieChart'
+import testData from './testData'
 
 // "자세히 보기"에서 들어올 때 상단 여백을 가릴 정도로만 내려주는 오프셋
 const SCROLL_OFFSET = 100
@@ -196,7 +197,8 @@ export default function PerformanceDashboardMain() {
             <CustomBarChart
               title=""
               yLabel=""
-              data={scoreData ?? undefined}
+              // data={scoreData ?? undefined}
+              data={testData}
               dataKey="score"
               name="name"
             />
