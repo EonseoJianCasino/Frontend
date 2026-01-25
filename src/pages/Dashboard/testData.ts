@@ -3,6 +3,7 @@ interface testDataType {
   uv: number
   pv: number
   amt: number
+  score?: number
 }
 
 const testData: testDataType[] = [
@@ -10,12 +11,14 @@ const testData: testDataType[] = [
     name: 'Page A',
     uv: 4000,
     pv: 35,
+    score: 35,
     amt: 2400,
   },
   {
     name: 'Page B',
     uv: 3000,
     pv: 50,
+    score: 100,
     amt: 2210,
   },
   {
