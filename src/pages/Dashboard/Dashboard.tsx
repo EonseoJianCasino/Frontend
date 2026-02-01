@@ -30,6 +30,16 @@ import testData from './testData'
 // "자세히 보기"에서 들어올 때 상단 여백을 가릴 정도로만 내려주는 오프셋
 const SCROLL_OFFSET = 100
 
+// [
+//     {
+//       metric: 'LCP', //LCP
+//       message:
+//         '가장 큰 텍스트 블록/이미지가 화면에 나타나는 시간 가장 큰 텍스트 블록/이미지가 화면에 나타나는 시간', // 가장 큰 텍스트 블록/이미지가 화면에 나타나는 시간
+//       urgentStatus: 'GOOD',
+//       value: '2.1초', // 2.1초
+//     },
+//   ]
+
 export default function PerformanceDashboardMain() {
   // ! 변수 ====
   const [testId, setTestId] = useState<string>('') // 테스트 ID
@@ -268,18 +278,18 @@ export default function PerformanceDashboardMain() {
             <li
               className={`box-border flex h-[58px] w-full flex-row items-center justify-center gap-x-4 rounded-[10px] border-l-4 ${
                 {
-                  양호: 'border-[#357BFA]',
-                  주의: 'border-[#FABF35]',
-                  긴급: 'border-[#FF3C3C]',
+                  poor: 'border-[#357BFA]',
+                  warning: 'border-[#FABF35]',
+                  good: 'border-[#FF3C3C]',
                 }[item.status]
               } bg-[#F8F9FA] px-4`}
             >
               <img
                 src={
                   {
-                    양호: img_ok,
-                    주의: img_warning,
-                    긴급: img_error,
+                    poor: img_ok,
+                    warning: img_warning,
+                    good: img_error,
                   }[item.status]
                 }
               />
