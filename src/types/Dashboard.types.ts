@@ -90,7 +90,7 @@ export interface AiPriority {
   rank: number
   targetType: string
   targetName: string
-  status: '긴급' | '주의' | '양호'
+  status: 'poor' | 'warning' | 'good' //'긴급' | '주의' | '양호'
   reason: string
 }
 // * 총 3개가 나온다.
