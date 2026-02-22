@@ -2,6 +2,7 @@ import ArrowRight from '../../assets/icons/arrowRight.svg'
 import styles from './SolutionPage.module.scss'
 
 import { useEffect, useState } from 'react'
+import axios from 'axios'
 import { fetchSolutions } from '@/apis/solutionApis'
 import type { MajorImprovement, Solution, SolutionResponse } from '@/types/Solution.types'
 import type { CurTest } from '@/types/Test.types'
@@ -13,6 +14,8 @@ export default function SolutionPage() {
   // const testId: string = 'ab8f4ba8-bfa7-4b6a-bf05-7efc7b9723b8'
 
   const [testId, setTestId] = useState<string>('') // 테스트 ID
+  const [isLoading, setIsLoading] = useState<boolean>(false)
+  const [loadError, setLoadError] = useState<string>('')
 
   // ! 변수 ===
   // 기존 점수
@@ -31,10 +34,21 @@ export default function SolutionPage() {
 
   // * 테스트 ID 받아오면 API 호출
   useEffect(() => {
+    if (!testId) return
+
+    let cancelled = false
+
     // * 우선 개선사항 받아오기
     const getSolutions = async () => {
+      setIsLoading(true)
+      setLoadError('')
+
       try {
-        const response: SolutionResponse = await fetchSolutions(testId) // 대시보드/우선개선이 필요한 항목
+        console.log('[SOLUTION][FETCH][START]', { testId })
+        const response: SolutionResponse = await fetchSolutions(testId)
+        if (cancelled) return
+        console.log('[SOLUTION][FETCH][SUCCESS]', { testId })
+
         setBeforeScore(response.success.data.overallTotalBefore) // 기존 점수
         setAfterScore(response.success.data.overallTotalAfter) // 개선 예상 점수
         setAfterScoreDetail(response.success.data.overallExpectedImprovement) // 개선 예상 점수 디테일
@@ -42,11 +56,30 @@ export default function SolutionPage() {
         setSolutionSecurityData(response.success.data.securityMetrics) // 보안 개선방안
         setMajorImprovementData(response.success.data.majorImprovements) // 기대 효과
       } catch (error) {
-        console.error(error)
+        if (cancelled) return
+        setLoadError('AI 분석 결과를 불러오지 못했습니다. 잠시 후 다시 시도해주세요.')
+        if (axios.isAxiosError(error)) {
+          console.error('[SOLUTION][FETCH][FAIL]', {
+            testId,
+            status: error.response?.status,
+            data: error.response?.data,
+            message: error.message,
+          })
+        } else {
+          console.error('[SOLUTION][FETCH][FAIL]', { testId, error })
+        }
+      } finally {
+        if (!cancelled) {
+          setIsLoading(false)
+        }
       }
     }
 
-    getSolutions()
+    void getSolutions()
+
+    return () => {
+      cancelled = true
+    }
   }, [testId])
 
   //* 첫 렌더링시 테스트 ID 받아오기
@@ -117,6 +150,8 @@ export default function SolutionPage() {
         {/* 단계별 개선 방안  */}
         <article className={styles.step_solution_container}>
           <h2 className={styles.title}>단계별 개선 방안</h2>
+          {isLoading && <p className="text-sm text-[#6B7280]">AI 분석 결과를 준비 중입니다...</p>}
+          {!isLoading && loadError && <p className="text-sm text-[#DC2626]">{loadError}</p>}
           <SolutionCards data={solutionWebVitalData} />
           <SolutionCards data={solutionSecurityData} />
         </article>

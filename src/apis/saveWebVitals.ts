@@ -24,3 +24,20 @@ export async function saveWebVitals(testId: string, body: WebVitalsRequest) {
     throw new Error('Web Vitals 저장 실패')
   }
 }
+
+export async function saveWebVitalsSub(testId: string, body: Record<string, unknown> = {}) {
+  const url = `${BASE_URL}/api/tests/${testId}/web-vitals/sub`
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+
+  if (!res.ok) {
+    console.error('saveWebVitalsSub failed: ', res.status, res.statusText)
+    throw new Error('Web Vitals Sub 저장 실패')
+  }
+}

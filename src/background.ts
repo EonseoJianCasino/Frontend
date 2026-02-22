@@ -1,5 +1,5 @@
 import type { CurTest } from '@/types/Test.types'
-import { saveWebVitals, type WebVitalsRequest } from '@/apis/saveWebVitals'
+import { saveWebVitals, saveWebVitalsSub, type WebVitalsRequest } from '@/apis/saveWebVitals'
 
 const getHashedWebVitalsFromViteManifest = async (): Promise<string | null> => {
   try {
@@ -275,9 +275,22 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
               LCP: metrics.LCP!,
               TTFB: metrics.TTFB!,
             }
+            console.log('[Background] saveWebVitals start', curTest.testId)
             await saveWebVitals(curTest.testId, body)
             console.log('[Background] saveWebVitals success', curTest.testId)
-            chrome.storage.local.set({ curTestStatus: 'done', curTestStatusUpdatedAt: Date.now() })
+
+            // AI 트리거 조건(web_sub_received)을 만족시키기 위해 sub endpoint도 함께 호출한다.
+            // 현재 프론트에서 sub 상세 payload는 수집하지 않으므로 빈 객체로 상태 플래그를 우선 맞춘다.
+            console.log('[Background] saveWebVitalsSub start', curTest.testId)
+            await saveWebVitalsSub(curTest.testId, {})
+            console.log('[Background] saveWebVitalsSub success', curTest.testId)
+
+            // 팝업 로딩 단계에서 CORE_READY -> AI_READY 롱폴링을 이어서 수행하므로
+            // 여기서는 loading 상태를 유지하고 heartbeat 타임스탬프만 갱신한다.
+            chrome.storage.local.set({
+              curTestStatus: 'loading',
+              curTestStatusUpdatedAt: Date.now(),
+            })
             sendResponse({ ok: true })
           } catch (e) {
             console.error('[Background] saveWebVitals failed', e)
