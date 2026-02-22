@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { waitForCoreReady } from '@/apis/waitForCoreReady'
+import { waitForAiReadyWithRetry, waitForCoreReady } from '@/apis/waitForCoreReady'
 import type { CurTest } from '@/types/Test.types'
 
 type LoadingPageProps = {
@@ -9,7 +9,14 @@ type LoadingPageProps = {
 export default function LoadingPage({ onDone }: LoadingPageProps) {
   useEffect(() => {
     let cancelled = false
-    const timeoutMs = 35000
+    const timeoutMs = 210000
+    const heartbeatMs = 5000
+
+    const heartbeatId = window.setInterval(() => {
+      if (cancelled) return
+      chrome.storage.local.set({ curTestStatusUpdatedAt: Date.now() })
+    }, heartbeatMs)
+
     const timeoutId = window.setTimeout(() => {
       if (cancelled) return
       console.warn('Loading timeout, resetting state')
@@ -21,30 +28,47 @@ export default function LoadingPage({ onDone }: LoadingPageProps) {
       ])
     }, timeoutMs)
 
-    chrome.storage.local.get<{ curTest?: CurTest }>('curTest', (result) => {
+    chrome.storage.local.get<{ curTest?: CurTest }>('curTest', async (result) => {
       const curTest = result.curTest
       console.log('Loading curTest : ', curTest?.testId)
 
-      if (!curTest) {
+      if (!curTest?.testId) {
         console.error('testId null in curTest')
         return
       }
 
-      waitForCoreReady(curTest.testId)
-        .then(() => {
-          if (cancelled) return
-          console.log('CORE_READY 응답 도착 (웹바이탈 저장 대기)')
-          // 로딩 상태 유지하되 타임스탬프 갱신해서 stale 초기화를 방지한다.
-          chrome.storage.local.set({ curTestStatusUpdatedAt: Date.now() })
+      try {
+        console.log('[POPUP][FLOW][START]', { testId: curTest.testId })
+        await waitForCoreReady(curTest.testId)
+        if (cancelled) return
+
+        console.log('[POPUP][FLOW][CORE_READY][DONE]', { testId: curTest.testId })
+        chrome.storage.local.set({ curTestStatusUpdatedAt: Date.now() })
+
+        console.log('[POPUP][FLOW][AI_READY][START]', { testId: curTest.testId })
+        await waitForAiReadyWithRetry(curTest.testId)
+        if (cancelled) return
+
+        await chrome.storage.local.set({
+          curTestStatus: 'done',
+          curTestStatusUpdatedAt: Date.now(),
         })
-        .catch((e) => {
-          if (cancelled) return
-          console.error('waitForCoreReady error', e)
-        })
+        console.log('[POPUP][FLOW][DONE]', { testId: curTest.testId })
+        onDone()
+      } catch (e) {
+        if (cancelled) return
+        console.error('[POPUP][FLOW][FAIL]', { testId: curTest.testId, error: e })
+      } finally {
+        if (!cancelled) {
+          window.clearInterval(heartbeatId)
+          window.clearTimeout(timeoutId)
+        }
+      }
     })
 
     return () => {
       cancelled = true
+      clearInterval(heartbeatId)
       clearTimeout(timeoutId)
     }
   }, [onDone])

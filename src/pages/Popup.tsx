@@ -10,6 +10,7 @@ export default function Popup() {
   const [step, setStep] = useState(0)
   const delayedDoneTimer = useRef<number | undefined>(undefined)
   const MIN_LOADING_MS = 10000
+  const STALE_LOADING_MS = 300000
 
   const next = () => setStep((s) => Math.min(s + 1, 2))
   const prev = () => {
@@ -22,9 +23,9 @@ export default function Popup() {
     setStep(0)
   }
 
-  const resolveStepFromStatus = (status?: string, updatedAt?: number, _startedAt?: number) => {
+  const resolveStepFromStatus = (status?: string, updatedAt?: number) => {
     if (status === 'loading') {
-      const stale = updatedAt && Date.now() - updatedAt > 35000
+      const stale = updatedAt && Date.now() - updatedAt > STALE_LOADING_MS
       return stale ? 0 : 1
     }
     if (status === 'done') return 2
@@ -56,7 +57,7 @@ export default function Popup() {
     }
 
     const applyStepFromStatus = (status?: string, updatedAt?: number, startedAt?: number) => {
-      const nextStep = resolveStepFromStatus(status, updatedAt, startedAt)
+      const nextStep = resolveStepFromStatus(status, updatedAt)
       if (nextStep === 2 && startedAt) {
         // 최소 로딩 시간 보장
         const now = Date.now()
