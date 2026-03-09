@@ -3,6 +3,19 @@
 @layer components {
   // *단계별 개선 방안
   .step_solution_container {
+    // * 스크롤
+    &::before {
+      content: '';
+      position: absolute;
+
+      width: 1px;
+      height: calc(100% - 95px);
+      background-color: #007ba7;
+      top: 75px;
+      left: 36.5px;
+      z-index: 0;
+    }
+
     @apply relative box-border flex w-full max-w-[974px] flex-col items-center justify-around gap-y-6 rounded-[15px] border-2 border-solid border-[#DEEBEF] bg-[#FFFFFF] p-4 shadow-md;
 
     // * 상테 긴급
@@ -33,6 +46,66 @@
     // * 개선 방안
     .sub_container {
       @apply relative box-border flex w-full max-w-[974px] flex-col items-start justify-around gap-y-2 rounded-[15px] border-2 border-solid bg-[#FAFBFC] p-4 shadow-md;
+
+      // * 스크롤
+      margin-left: 35px;
+      width: calc(100% - 80px);
+
+      &::after {
+        content: '';
+        position: absolute;
+        top: -4px;
+        left: -46px;
+        width: 15px;
+        height: 15px;
+
+        background-color: #ffffff;
+        border-radius: 50%;
+
+        border: 1px solid #d9d9d9;
+
+        background: radial-gradient(circle, #007ba7 0 3.5px, transparent 3.5px);
+        box-shadow:
+          0 4px 6px -1px rgb(0 0 0 / 0.1),
+          0 2px 4px -2px rgb(0 0 0 / 0.1);
+        z-index: 20;
+      }
+      // // * 스크롤 -원
+      // &::before {
+      //   content: '';
+      //   position: absolute;
+      //   top: -4px;
+      //   left: -46px;
+      //   width: 15px;
+      //   height: 15px;
+      //   background-color: #ffffff;
+      //   border: 1px solid #d9d9d9;
+
+      //   border-radius: 100%;
+
+      //   z-index: 11;
+
+      //   box-shadow:
+      //     0 4px 6px -1px rgb(0 0 0 / 0.1),
+      //     0 2px 4px -2px rgb(0 0 0 / 0.1);
+      // }
+      // // * 스크롤 -원
+      // &::after {
+      //   content: '';
+      //   position: absolute;
+      //   top: 0;
+      //   left: -42px;
+      //   width: 7px;
+      //   height: 7px;
+      //   background-color: #007ba7;
+
+      //   box-sizing: content-box;
+
+      //   border-radius: 100%;
+
+      //   z-index: 12;
+      // }
+
       .sub_title {
         @apply box-border text-[16px] font-semibold text-[#4B4B4B];
       }
@@ -45,7 +118,7 @@
       .sub_effect_container {
         @apply flex h-[80px] w-full gap-x-4;
         .inner_item {
-          @apply box-border flex h-full flex-1 flex-col gap-y-2 bg-white p-4;
+          @apply box-border flex h-full flex-1 flex-col gap-y-2 rounded-[10px] bg-white p-4;
 
           // 예상 개선 효과, 연관 지표 제목
           h4 {
@@ -59,7 +132,7 @@
 
           // 연관 지표
           .indicator_container {
-            @apply box-border flex w-full gap-x-2;
+            @apply box-border flex w-full gap-x-2 rounded-[10px];
 
             .item {
               @apply flex h-[27px] min-w-[72px] items-center justify-center rounded-[5px] bg-[#E8F4F7] px-4 text-[14px] font-semibold text-[#007BA7];
