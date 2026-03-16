@@ -120,7 +120,7 @@ export default function PerformanceDashboardMain() {
       }
     }
 
-    //* 대시보드 total 점수 받아오기
+    //* 대시보드 점수 받아오기
     const getScores = async () => {
       try {
         const response = await fetchScores(testId) // 대시보드/우선개선이 필요한 항목
@@ -208,7 +208,7 @@ export default function PerformanceDashboardMain() {
               title=""
               yLabel=""
               // data={scoreData ?? undefined}
-              data={testData}
+              data={scoreData ?? testData}
               dataKey="score"
               name="name"
             />
@@ -239,7 +239,6 @@ export default function PerformanceDashboardMain() {
               {/* 카드 6개 */}
               {scoreData?.map((item) => {
                 return (
-                  // TODO : 추후에 데이터 넣어서 변경
                   <div className="border-box relative flex h-full w-full flex-col items-center justify-center rounded-[15px] p-2 shadow-md">
                     <div className="border-box absolute top-2 flex w-full flex-row items-center px-2">
                       <div className="w-full text-[16px] text-[#83869A]">{item.name}</div>
